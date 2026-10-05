@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Panel de coordinación · Cursos de verano · Universidad Continental</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=DM+Sans:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{--m:#6A00BE;--mo:#4B0087;--n:#120C1C;--a:#F2A900;--l:#F3ECFB;--lf:#F6F2FA;--t:#15111C;--s:#575163;--b:#E5E2EB;--ok:#145C34;--okb:#E3F2EA;--av:#6B4200;--avb:#FFF3D6;--er:#7A2419;--erb:#FDE9E7}
+*{box-sizing:border-box}
+body{margin:0;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;line-height:1.5;color:var(--t);background:#F8F7FA}
+h1,h2,h3{font-family:Sora,sans-serif;margin:0}
+a{color:var(--m)}
+button,input,select,textarea{font:inherit}
+:focus-visible{outline:3px solid var(--a);outline-offset:2px;box-shadow:0 0 0 2px var(--n);border-radius:6px}
+.oculto{display:none!important}
+.demo{background:var(--l);color:var(--mo);font-size:14px;padding:9px 16px;text-align:center}
+.demo b.tag{background:var(--mo);color:#fff;padding:2px 8px;border-radius:999px;font-size:12px;margin-right:6px}
+header{background:#fff;border-bottom:1px solid #ECE6F3;position:sticky;top:0;z-index:20}
+.fila{max-width:1280px;margin:0 auto;padding:0 24px;min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.marca{display:flex;align-items:center;gap:14px}
+.marca img{height:40px}
+.marca span{font:700 15px Sora,sans-serif;color:var(--mo);border-left:1px solid var(--b);padding-left:14px}
+.usuario{display:flex;align-items:center;gap:10px;font-size:14px}
+.rol{padding:3px 10px;border-radius:999px;font-weight:700;font-size:12.5px}
+.btn{min-height:44px;padding:0 18px;border-radius:999px;border:2px solid var(--m);background:var(--m);color:#fff;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}
+.btn:hover{background:var(--mo);border-color:var(--mo)}
+.btn.sec{background:#fff;color:var(--mo)} .btn.sec:hover{background:var(--l)}
+.btn.chico{min-height:40px;padding:0 14px;font-size:14px}
+.btn.wa{background:#1B7A43;border-color:#1B7A43}.btn.wa:hover{background:#145C34}
+.btn-texto{background:none;border:0;color:var(--mo);font-weight:700;cursor:pointer;text-decoration:underline;min-height:44px;padding:0 6px}
+nav.tabs{background:#fff;border-bottom:1px solid #ECE6F3}
+nav.tabs .fila{min-height:0;gap:4px;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}
+nav.tabs button{flex:none;min-height:52px;padding:0 16px;border:0;border-bottom:3px solid transparent;background:none;cursor:pointer;font-weight:500;color:var(--t)}
+nav.tabs button[aria-current="page"]{border-bottom-color:var(--m);color:var(--mo);font-weight:700}
+main{max-width:1280px;margin:0 auto;padding:26px 24px 60px}
+.intro{color:var(--s);margin:6px 0 20px;max-width:80ch}
+.tarjeta{background:#fff;border:1px solid var(--b);border-radius:18px;padding:20px}
+.grid{display:grid;gap:16px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.kpi small{display:block;color:var(--s);font-size:13.5px}
+.kpi b{font:400 44px/1 'Bebas Neue',sans-serif;color:var(--m)}
+.fase{background:var(--n);color:#fff;border-radius:18px;padding:20px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between}
+.fase b.t{font:700 18px Sora,sans-serif}
+.fase dl{display:flex;flex-wrap:wrap;gap:8px 24px;margin:0}
+.fase dt{font-size:12.5px;color:#D9C2F0}.fase dd{margin:0;font:400 22px/1 'Bebas Neue',sans-serif;color:var(--a)}
+.barras{display:flex;flex-direction:column;gap:10px}
+.barra{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) 36px;gap:12px;align-items:center;font-size:14px}
+.pista{height:14px;border-radius:99px;background:var(--lf);position:relative;overflow:hidden}
+.pista i{display:block;height:100%;border-radius:99px;background:var(--m)}
+.pista .min{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--n)}
+.tabla-scroll{overflow-x:auto;border:1px solid var(--b);border-radius:16px;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:860px}
+th{background:var(--m);color:#fff;text-align:left;padding:11px 12px;font-weight:700}
+td{padding:11px 12px;border-top:1px solid var(--b);vertical-align:top}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.p-ok{background:var(--okb);color:var(--ok)} .p-av{background:var(--avb);color:var(--av)} .p-er{background:var(--erb);color:var(--er)} .p-gr{background:#F1EDF5;color:#3E3850} .p-m{background:var(--l);color:var(--mo)}
+input[type=number],input[type=date],input[type=time],input[type=search],select,textarea{min-height:40px;border:1px solid #BDB4CB;border-radius:10px;padding:6px 10px;background:#fff;color:var(--t)}
+input[type=number]{width:80px}
+label.campo{display:flex;flex-direction:column;gap:4px;font-size:13.5px;font-weight:700}
+.filtros{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:16px}
+.est{background:#fff;border:1px solid var(--b);border-radius:16px;padding:16px;display:grid;gap:12px;grid-template-columns:minmax(0,1.3fr) minmax(0,1.4fr) minmax(0,1fr)}
+.est h3{font-size:16px}
+.meta{font-size:13.5px;color:var(--s)}
+.acciones{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+details.hist summary{cursor:pointer;font-weight:700;color:var(--mo);min-height:36px;display:flex;align-items:center}
+details.hist ul{margin:6px 0;padding-left:18px;font-size:13.5px;color:var(--s)}
+textarea{width:100%;min-height:60px}
+.modal-fondo{position:fixed;inset:0;background:rgba(18,12,28,.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal{background:#fff;border-radius:18px;max-width:560px;width:100%;padding:22px;display:flex;flex-direction:column;gap:12px}
+.mensaje{background:var(--lf);border-radius:12px;padding:12px;white-space:pre-wrap;font-size:14.5px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--n);color:#fff;padding:12px 18px;border-radius:12px;z-index:60;max-width:90vw}
+.perfil-op{display:block;width:100%;text-align:left;border:1px solid var(--b);border-radius:12px;padding:14px;background:#fff;cursor:pointer;margin-top:8px}
+.perfil-op:hover{border-color:var(--m);background:var(--l)}
+.ingreso{max-width:560px;margin:60px auto;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center}
+label.campo input,label.campo select{max-width:100%}
+@media (max-width: 600px){ main{padding:20px 14px 48px} .fila{padding:0 14px} }
+@media (max-width: 900px){ .est{grid-template-columns:minmax(0,1fr)} .barra{grid-template-columns:minmax(0,1fr) 44px} .barra .pista{grid-column:1 / -1;order:3} }
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="demo" role="note"><b class="tag">DEMO</b><b>Prototipo con datos de demostración.</b> Estudiantes, celulares y solicitudes ficticios; los datos se guardan solo en este navegador. <a href="app.html">Ver el portal del estudiante</a></div>
+<header><div class="fila">
+  <div class="marca"><img src="https://adistancia.ucontinental.edu.pe/assets/img/logo.svg" alt="Universidad Continental · Modalidad A Distancia"><span>Panel de cursos de verano</span></div>
+  <div class="usuario oculto" id="usuario"></div>
+</div></header>
+<nav class="tabs oculto" id="tabs" aria-label="Secciones del panel"><div class="fila" id="tabs-fila"></div></nav>
+<main id="main" tabindex="-1"></main>
+<div id="modal"></div>
+
+<script src="js/config.js"></script>
+<script src="js/datos-prototipo.js"></script>
+<script src="js/campana.js"></script>
+<script>
+(function () {
+  const CA = UCP.campana, P = UC_PROTO;
+  const $ = (id) => document.getElementById(id);
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const titulo = (s) => String(s || '').toLowerCase().replace(/(^|\s)\S/g, (m) => m.toUpperCase());
+  const fecha = (iso) => { if (!iso) return 'Por definir'; const [y, m, d] = iso.slice(0, 10).split('-'); return `${d}/${m}/${y}`; };
+  const DIAS = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const USUARIOS = [
+    { id: 'u1', nombre: 'Ana Torres', correo: 'atorres.demo@continental.edu.pe', rol: 'mesa', rolT: 'Mesa de ayuda' },
+    { id: 'u2', nombre: 'Carlos Medina', correo: 'cmedina.demo@continental.edu.pe', rol: 'coordinacion', rolT: 'Coordinación académica' }
+  ];
+  const curso = (k) => P.malla.cursos.find((c) => c.codigo === k) || { codigo: k, nombre: k, creditos: 0, ciclo: '-' };
+  let U = null, vista = 'resumen', filtro = { curso: '', estado: '', pref: '', q: '' };
+  const esCoord = () => U && U.rol === 'coordinacion';
+
+  function toast(t) { const d = document.createElement('div'); d.className = 'toast'; d.setAttribute('role', 'status'); d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 3200); }
+
+  // ---------------- Ingreso ----------------
+  function ingreso() {
+    $('tabs').classList.add('oculto'); $('usuario').classList.add('oculto');
+    $('main').innerHTML = `<div class="ingreso"><h1 style="font-size:28px">Panel de cursos de verano</h1>
+      <p class="intro" style="margin:0">Acceso solo para el equipo autorizado de Coordinación académica y de la mesa de ayuda.</p>
+      <button class="btn" id="btn-google">Ingresar con Google (@continental.edu.pe)</button></div>`;
+  }
+  function selector() {
+    $('modal').innerHTML = `<div class="modal-fondo" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="modal">
+      <h2 id="mt" style="font-size:20px">Ingreso de demostración</h2>
+      <p class="meta" style="margin:0">En la versión real, el sistema reconoce tu rol por tu cuenta institucional. Elige un usuario de ejemplo:</p>
+      ${USUARIOS.map((u) => `<button class="perfil-op" data-usuario="${u.id}"><b>${esc(u.nombre)}</b><br><span class="meta">${esc(u.rolT)}</span></button>`).join('')}
+      <div style="text-align:right"><button class="btn-texto" data-cerrar>Cancelar</button></div></div></div>`;
+    document.querySelector('.perfil-op').focus();
+  }
+  function entrar(id) {
+    U = USUARIOS.find((u) => u.id === id); sessionStorage.setItem('uc_proto_panel', id); $('modal').innerHTML = '';
+    $('usuario').innerHTML = `<span><b>${esc(U.nombre)}</b></span><span class="rol ${U.rol === 'coordinacion' ? 'p-m' : 'p-ok'}">${esc(U.rolT)}</span><button class="btn-texto" id="btn-salir">Cerrar sesión</button>`;
+    $('usuario').classList.remove('oculto'); $('tabs').classList.remove('oculto'); ir('resumen');
+  }
+
+  function ir(v) {
+    vista = v;
+    const tabs = [['resumen', 'Resumen'], ['demanda', 'Demanda por curso'], ['estudiantes', 'Estudiantes'], ...(esCoord() ? [['config', 'Configuración']] : [])];
+    $('tabs-fila').innerHTML = tabs.map(([k, t]) => `<button data-vista="${k}" ${k === vista ? 'aria-current="page"' : ''}>${t}</button>`).join('');
+    ({ resumen: vResumen, demanda: vDemanda, estudiantes: vEstudiantes, config: vConfig })[v]();
+  }
+
+  // ---------------- Datos derivados ----------------
+  function filasDemanda() {
+    const c = CA.leer(), d = CA.demanda();
+    return P.oferta.cursos.map((o) => { const cu = curso(o.codigo), min = CA.minimo(c, o.codigo), n = d[o.codigo] || 0;
+      const sem = n >= min ? ['Alcanza', 'p-ok'] : n >= min * 0.7 ? ['Cerca', 'p-av'] : ['Lejos', 'p-er'];
+      return { codigo: o.codigo, nombre: cu.nombre, ciclo: cu.ciclo, creditos: cu.creditos, n, min, sem, estado: CA.estadoCurso(c, o.codigo), secciones: CA.seccionesCurso(c, o.codigo) };
+    }).sort((a, b) => b.n - a.n || a.ciclo - b.ciclo);
+  }
+
+  // ---------------- Resumen ----------------
+  function vResumen() {
+    const c = CA.leer(), sol = CA.vigentes(), filas = filasDemanda(), conDem = filas.filter((f) => f.n > 0);
+    const cuenta = (e) => sol.filter((s) => s.seguimiento.estado === e).length;
+    const contactados = sol.filter((s) => s.seguimiento.estado !== 'pendiente').length;
+    const embudo = [['Solicitaron', sol.length], ['Contactados', contactados], ['Orientados', cuenta('orientado') + cuenta('matriculado')], ['Matriculados (intranet)', cuenta('matriculado')]];
+    const porDia = {}; sol.forEach((s) => { const k = s.fecha.slice(0, 10); porDia[k] = (porDia[k] || 0) + 1; });
+    const dias = Object.keys(porDia).sort(), maxD = Math.max(1, ...Object.values(porDia));
+    const F = CA.FASES[c.fase];
+    $('main').innerHTML = `<h1 style="font-size:28px">Resumen de la campaña</h1><p class="intro">Demanda de cursos de verano 2027 y avance del seguimiento.</p>
+      <section class="fase" aria-label="Fase actual"><div><span class="meta" style="color:#D9C2F0">Fase actual</span><br><b class="t">${esc(F.t)}</b><div style="color:#E9E1F3;font-size:14px">${esc(F.d)}</div></div>
+        <dl><div><dt>Inicio</dt><dd>${fecha(c.inicio)}</dd></div><div><dt>Cierre</dt><dd>${fecha(c.cierre)}</dd></div><div><dt>Horarios</dt><dd>${fecha(c.horarios)}</dd></div><div><dt>Matrícula</dt><dd>${fecha(c.matInicio)}</dd></div></dl></section>
+      <div class="grid kpis" style="margin-top:16px">
+        ${[['Estudiantes con solicitud', sol.length], ['Cursos solicitados', conDem.length], ['Cursos que alcanzan el mínimo', `${filas.filter((f) => f.n >= f.min).length} de ${conDem.length}`], ['Pendientes de contacto', cuenta('pendiente')], ['Matriculados', cuenta('matriculado')]]
+          .map(([t, v]) => `<div class="tarjeta kpi"><small>${t}</small><b>${v}</b></div>`).join('')}
+      </div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));margin-top:16px">
+        <section class="tarjeta"><h2 style="font-size:18px;margin-bottom:12px">Cursos más solicitados</h2><div class="barras">
+          ${conDem.slice(0, 6).map((f) => { const tope = Math.max(f.min * 1.4, ...conDem.map((x) => x.n)); return `<div class="barra"><span>${esc(f.nombre)}</span><div class="pista" aria-label="${f.n} solicitudes, mínimo ${f.min}"><i style="width:${(f.n / tope) * 100}%;background:${f.n >= f.min ? '#145C34' : '#6A00BE'}"></i><span class="min" style="left:${(f.min / tope) * 100}%"></span></div><b>${f.n}</b></div>`; }).join('')}
+          <p class="meta" style="margin:4px 0 0">La línea negra marca el mínimo de estudiantes para abrir el curso.</p></div></section>
+        <section class="tarjeta"><h2 style="font-size:18px;margin-bottom:12px">Seguimiento</h2><div class="barras">
+          ${embudo.map(([t, n]) => `<div class="barra"><span>${t}</span><div class="pista"><i style="width:${sol.length ? (n / sol.length) * 100 : 0}%"></i></div><b>${n}</b></div>`).join('')}</div></section>
+        <section class="tarjeta"><h2 style="font-size:18px;margin-bottom:12px">Solicitudes por día</h2>
+          <div style="display:flex;align-items:flex-end;gap:4px;height:120px" role="img" aria-label="Solicitudes por día">${dias.map((k) => `<div title="${fecha(k)}: ${porDia[k]}" style="flex:1;background:#6A00BE;border-radius:4px 4px 0 0;height:${(porDia[k] / maxD) * 100}%"></div>`).join('')}</div>
+          <p class="meta" style="margin:8px 0 0">${dias.length ? `Del ${fecha(dias[0])} al ${fecha(dias.at(-1))}` : 'Sin solicitudes todavía'}</p></section>
+      </div>`;
+  }
+
+  // ---------------- Demanda por curso ----------------
+  function vDemanda() {
+    const filas = filasDemanda(), coord = esCoord();
+    const fila = (f) => `<tr>
+      <td><b>${esc(f.nombre)}</b><div class="meta">${esc(f.codigo)} · Ciclo ${f.ciclo} · ${f.creditos} créditos</div></td>
+      <td><b style="font:400 28px/1 'Bebas Neue',sans-serif;color:#6A00BE">${f.n}</b></td>
+      <td>${coord ? `<label class="campo" style="font-weight:400"><span class="meta">Mínimo</span><input type="number" min="1" max="200" value="${f.min}" data-minimo="${f.codigo}" aria-label="Mínimo de estudiantes para ${esc(f.nombre)}"></label>` : f.min}</td>
+      <td><span class="pill ${f.sem[1]}">${f.sem[0]}</span></td>
+      <td>${coord ? `<select data-estado="${f.codigo}" aria-label="Estado de ${esc(f.nombre)}">${Object.entries(CA.ESTADOS_CURSO).map(([k, t]) => `<option value="${k}" ${k === f.estado ? 'selected' : ''}>${t}</option>`).join('')}</select>` : `<span class="pill ${f.estado === 'abierto' ? 'p-ok' : f.estado === 'no_abierto' ? 'p-er' : 'p-gr'}">${CA.ESTADOS_CURSO[f.estado]}</span>`}</td>
+      <td>${f.secciones.map((s, i) => `<div class="meta">${esc(s.seccion)} · ${DIAS[s.dia]} ${esc(s.hora_inicio)}–${esc(s.hora_fin)} ${coord ? `<button class="btn-texto" data-quitar-sec="${f.codigo}" data-i="${i}" aria-label="Quitar la sección ${esc(s.seccion)} de ${esc(f.nombre)}">Quitar</button>` : ''}</div>`).join('') || '<span class="meta">—</span>'}
+        ${coord && f.estado === 'abierto' ? `<details style="margin-top:6px"><summary class="btn-texto" style="display:inline-flex">Agregar sección</summary>
+          <div class="filtros" style="margin:8px 0 0"><label class="campo">Día<select data-nueva-dia="${f.codigo}">${[1, 2, 3, 4, 5, 6].map((d) => `<option value="${d}">${DIAS[d]}</option>`).join('')}</select></label>
+          <label class="campo">Inicio<input type="time" value="19:00" data-nueva-ini="${f.codigo}"></label><label class="campo">Fin<input type="time" value="22:00" data-nueva-fin="${f.codigo}"></label>
+          <button class="btn chico" data-agregar-sec="${f.codigo}">Agregar</button></div></details>` : ''}</td>
+      <td><button class="btn sec chico" data-ver-estudiantes="${f.codigo}" ${f.n ? '' : 'disabled'}>Ver estudiantes</button></td></tr>`;
+    $('main').innerHTML = `<h1 style="font-size:28px">Demanda por curso</h1>
+      <p class="intro">${coord ? 'Define el mínimo de estudiantes por curso, marca qué cursos se abren y carga sus secciones (una sesión en vivo por semana). Al marcar un curso como abierto o no abierto, el sistema envía un correo automático a quienes lo solicitaron.' : 'Demanda de cada curso frente al mínimo para abrirlo. Solo Coordinación académica puede cambiar el estado de los cursos.'}</p>
+      <div class="tabla-scroll"><table><thead><tr><th>Curso</th><th>Solicitudes</th><th>Mínimo</th><th>Semáforo</th><th>Estado</th><th>Secciones</th><th></th></tr></thead><tbody>${filas.map(fila).join('')}</tbody></table></div>`;
+  }
+
+  // ---------------- Estudiantes ----------------
+  function mensajes(s) {
+    const c = CA.leer(), nombre = titulo(s.estudiante.nombres.split(' ')[0]);
+    const lista = s.cursos.map((x) => x.nombre).join(', ');
+    const abiertos = s.cursos.filter((x) => CA.estadoCurso(c, x.codigo) === 'abierto').map((x) => x.nombre);
+    const noAb = s.cursos.filter((x) => CA.estadoCurso(c, x.codigo) === 'no_abierto').map((x) => x.nombre);
+    let cuerpo;
+    if (c.fase === 'horarios' && abiertos.length) cuerpo = `¡Buenas noticias! Se abrió ${abiertos.join(', ')} para el verano 2027. Ingresa al portal de cursos de verano para elegir tu sección y luego matricúlate en la intranet del ${fecha(c.matInicio)} al ${fecha(c.matFin)}.${noAb.length ? ` ${noAb.join(', ')} no alcanzó el mínimo de estudiantes; podemos orientarte sobre alternativas.` : ''}`;
+    else if (noAb.length && !abiertos.length) cuerpo = `Te escribimos por tu solicitud de ${noAb.join(', ')}. Lamentablemente no alcanzó el mínimo de estudiantes para abrirse en el verano 2027. Podemos orientarte sobre otras opciones para avanzar en tu carrera.`;
+    else cuerpo = `Recibimos tu solicitud de apertura de ${lista} para el verano 2027. Te escribimos para orientarte: los horarios se publicarán el ${fecha(c.horarios)} y la matrícula se realiza en la intranet. ¿Tienes alguna consulta?`;
+    const texto = `Hola, ${nombre}. Te saluda ${U.nombre}, de la mesa de ayuda de la Universidad Continental (Modalidad A Distancia). ${cuerpo}`;
+    return { texto, asunto: `Tu solicitud de cursos de verano 2027 · ${s.id}` };
+  }
+  function contactar(id, canal) {
+    const s = CA.vigentes().find((x) => x.id === id), m = mensajes(s), cel = s.contacto.celular || '', num = cel.replace(/\D/g, '');
+    const proto = UCP.config.modo === 'prototipo';
+    const enlace = canal === 'whatsapp' ? (proto ? `https://wa.me/?text=${encodeURIComponent(m.texto)}` : `https://wa.me/${num}?text=${encodeURIComponent(m.texto)}`)
+      : canal === 'llamada' ? `tel:+${num}` : `mailto:${s.estudiante.correo}?subject=${encodeURIComponent(m.asunto)}&body=${encodeURIComponent(m.texto)}`;
+    const T = { whatsapp: 'WhatsApp', llamada: 'Llamada', correo: 'Correo' }[canal];
+    $('modal').innerHTML = `<div class="modal-fondo" role="dialog" aria-modal="true" aria-labelledby="mc"><div class="modal">
+      <h2 id="mc" style="font-size:20px">${T} a ${esc(titulo(s.estudiante.nombres + ' ' + s.estudiante.apellidos))}</h2>
+      <p class="meta" style="margin:0">${canal === 'correo' ? esc(s.estudiante.correo) : esc(cel || 'Sin celular registrado')} · Prefiere: ${esc(CA.PREFERENCIAS[s.contacto.preferencia])}</p>
+      ${canal !== 'llamada' ? `<div class="mensaje">${esc(m.texto)}</div>` : '<p style="margin:0">Guion sugerido: confirma su solicitud, explica que los horarios se publican al cierre y que la matrícula se hace en la intranet.</p>'}
+      ${proto ? `<p class="pill p-av" style="white-space:normal;margin:0">Prototipo: el celular es ficticio, así que ${canal === 'whatsapp' ? 'WhatsApp se abrirá sin destinatario para que veas el mensaje. En el piloto se abrirá directamente el chat del estudiante.' : canal === 'llamada' ? 'no se inicia la llamada. En el piloto, el botón llamará al estudiante.' : 'el correo es de ejemplo.'}</p>` : ''}
+      <label style="display:flex;gap:10px;align-items:center;min-height:44px"><input type="checkbox" id="marcar" checked style="width:20px;height:20px;accent-color:#6A00BE"> Marcar como contactado y registrar en el historial</label>
+      <div class="acciones">${canal === 'llamada' && proto ? '' : `<a class="btn ${canal === 'whatsapp' ? 'wa' : ''}" href="${esc(enlace)}" target="_blank" rel="noopener" data-registrar="${s.id}" data-canal="${canal}">${canal === 'whatsapp' ? 'Abrir WhatsApp' : canal === 'llamada' ? 'Llamar' : 'Abrir correo'}</a>`}
+        ${canal !== 'llamada' ? `<button class="btn sec" data-copiar>Copiar mensaje</button>` : ''}
+        <button class="btn sec" data-registrar="${s.id}" data-canal="${canal}" data-solo-registro>Solo registrar</button>
+        <button class="btn-texto" data-cerrar>Cerrar</button></div></div></div>`;
+    $('modal').dataset.texto = m.texto;
+  }
+  function registrar(id, canal) {
+    if ($('marcar') && $('marcar').checked) {
+      const s = CA.vigentes().find((x) => x.id === id);
+      CA.actualizarSeguimiento(id, s.seguimiento.estado === 'pendiente' ? { estado: 'contactado' } : {}, `${U.nombre} (${U.rolT})`, `Contacto por ${CA.PREFERENCIAS[canal]}`);
+    }
+    $('modal').innerHTML = ''; if (vista === 'estudiantes') vEstudiantes(); toast('Contacto registrado en el historial.');
+  }
+
+  function vEstudiantes() {
+    const c = CA.leer();
+    let sol = CA.vigentes();
+    if (filtro.curso) sol = sol.filter((s) => s.cursos.some((x) => x.codigo === filtro.curso));
+    if (filtro.estado) sol = sol.filter((s) => s.seguimiento.estado === filtro.estado);
+    if (filtro.pref) sol = sol.filter((s) => s.contacto.preferencia === filtro.pref);
+    if (filtro.q) { const q = filtro.q.toLowerCase(); sol = sol.filter((s) => (s.estudiante.nombres + ' ' + s.estudiante.apellidos + ' ' + s.estudiante.correo + ' ' + s.id).toLowerCase().includes(q)); }
+    const solicitados = filasDemanda().filter((f) => f.n > 0);
+    const opc = (obj, sel) => Object.entries(obj).map(([k, t]) => `<option value="${k}" ${k === sel ? 'selected' : ''}>${t}</option>`).join('');
+    const tarjeta = (s) => {
+      const e = s.estudiante, seg = s.seguimiento;
+      const cursos = s.cursos.map((x) => { const ec = CA.estadoCurso(c, x.codigo); return `<span class="pill ${ec === 'abierto' ? 'p-ok' : ec === 'no_abierto' ? 'p-er' : 'p-m'}" style="margin:0 4px 4px 0">${esc(x.nombre)}${x.seccion ? ' · ' + esc(x.seccion) : ''}</span>`; }).join('');
+      return `<article class="est" aria-label="${esc(titulo(e.nombres + ' ' + e.apellidos))}">
+        <div><h3>${esc(titulo(e.nombres + ' ' + e.apellidos))}</h3><div class="meta">${esc(e.correo)}<br>${esc(e.carrera)} · ${e.ciclo}.° ciclo · ${esc(s.id)}</div>
+          <div class="meta" style="margin-top:6px">Prefiere <b>${esc(CA.PREFERENCIAS[s.contacto.preferencia])}</b> · ${esc(s.contacto.celular || 'sin celular')}</div></div>
+        <div><div style="font-size:13px;font-weight:700;margin-bottom:6px">${s.creditos} créditos solicitados</div>${cursos}
+          <details class="hist"><summary>Historial y notas (${seg.historial.length})</summary><ul>${seg.historial.slice().reverse().map((h) => `<li>${fecha(h.fecha)} · ${esc(h.accion)} · <i>${esc(h.usuario)}</i></li>`).join('')}</ul>
+          <label class="campo" style="font-weight:400"><span class="meta">Notas de orientación</span><textarea data-notas="${s.id}">${esc(seg.notas || '')}</textarea></label></details></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><label class="campo">Seguimiento<select data-seguimiento="${s.id}">${opc(CA.SEGUIMIENTO, seg.estado)}</select></label>
+          <div class="acciones"><button class="btn wa chico" data-contactar="${s.id}" data-canal="whatsapp" aria-label="WhatsApp a ${esc(e.nombres)}">WhatsApp</button>
+          <button class="btn sec chico" data-contactar="${s.id}" data-canal="llamada" aria-label="Llamar a ${esc(e.nombres)}">Llamar</button>
+          <button class="btn sec chico" data-contactar="${s.id}" data-canal="correo" aria-label="Correo a ${esc(e.nombres)}">Correo</button></div></div></article>`;
+    };
+    $('main').innerHTML = `<h1 style="font-size:28px">Estudiantes que solicitaron cursos</h1>
+      <p class="intro">Orienta a cada estudiante por el medio que prefiere y registra el seguimiento. La matrícula se hace en la intranet.</p>
+      <div class="filtros">
+        <label class="campo">Curso<select id="f-curso"><option value="">Todos</option>${solicitados.map((f) => `<option value="${f.codigo}" ${f.codigo === filtro.curso ? 'selected' : ''}>${esc(f.nombre)} (${f.n})</option>`).join('')}</select></label>
+        <label class="campo">Seguimiento<select id="f-estado"><option value="">Todos</option>${opc(CA.SEGUIMIENTO, filtro.estado)}</select></label>
+        <label class="campo">Prefiere<select id="f-pref"><option value="">Todos</option>${opc(CA.PREFERENCIAS, filtro.pref)}</select></label>
+        <label class="campo">Buscar<input type="search" id="f-q" value="${esc(filtro.q)}" placeholder="Nombre, correo o n.° de solicitud"></label>
+        <button class="btn sec" id="exportar">Exportar a Excel (CSV)</button>
+      </div>
+      <p class="meta" role="status">${sol.length} ${sol.length === 1 ? 'estudiante' : 'estudiantes'}</p>
+      <div class="grid">${sol.map(tarjeta).join('') || '<p class="tarjeta">No hay estudiantes con estos filtros.</p>'}</div>`;
+  }
+  function exportar() {
+    const c = CA.leer(), filas = [['Solicitud', 'Fecha', 'Nombres', 'Apellidos', 'Correo', 'Celular', 'Prefiere', 'Ciclo', 'Curso', 'Código', 'Créditos', 'Sección', 'Estado del curso', 'Seguimiento', 'Notas']];
+    CA.vigentes().forEach((s) => s.cursos.forEach((x) => filas.push([s.id, fecha(s.fecha), s.estudiante.nombres, s.estudiante.apellidos, s.estudiante.correo, s.contacto.celular, CA.PREFERENCIAS[s.contacto.preferencia], s.estudiante.ciclo, x.nombre, x.codigo, x.creditos, x.seccion || '', CA.ESTADOS_CURSO[CA.estadoCurso(c, x.codigo)], CA.SEGUIMIENTO[s.seguimiento.estado], s.seguimiento.notas || ''])));
+    const csv = '\ufeff' + filas.map((f) => f.map((v) => `"${String(v ?? '').replace(/"/g, '""')}"`).join(';')).join('\r\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = 'solicitudes-verano-2027.csv'; a.click();
+  }
+
+  // ---------------- Configuración (solo Coordinación) ----------------
+  function vConfig() {
+    if (!esCoord()) { ir('resumen'); return; }
+    const c = CA.leer(), cargaPlan = CA.cargaPlan(P.malla);
+    $('main').innerHTML = `<h1 style="font-size:28px">Configuración de la campaña</h1><p class="intro">Solo Coordinación académica puede cambiar estos valores.</p>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))">
+      <section class="tarjeta"><h2 style="font-size:18px;margin-bottom:12px">Fase y fechas</h2><div class="filtros" style="flex-direction:column;align-items:stretch">
+        <label class="campo">Fase actual<select id="c-fase">${Object.entries(CA.FASES).map(([k, f]) => `<option value="${k}" ${k === c.fase ? 'selected' : ''}>${f.t}</option>`).join('')}</select></label>
+        ${[['inicio', 'Inicio de solicitudes'], ['cierre', 'Cierre de solicitudes'], ['horarios', 'Publicación de horarios'], ['matInicio', 'Inicio de matrícula'], ['matFin', 'Fin de matrícula']].map(([k, t]) => `<label class="campo">${t}<input type="date" id="c-${k}" value="${c[k] || ''}"></label>`).join('')}
+      </div></section>
+      <section class="tarjeta"><h2 style="font-size:18px;margin-bottom:12px">Reglas</h2><div class="filtros" style="flex-direction:column;align-items:stretch">
+        <label class="campo">Mínimo de estudiantes por defecto<input type="number" id="c-minimo" min="1" value="${c.minimoDefecto}"></label>
+        <label class="campo">Créditos por ciclo para los escenarios de egreso<input type="number" id="c-carga" min="12" max="25" value="${c.carga || ''}" placeholder="${cargaPlan}"><span class="meta" style="font-weight:400">Vacío = máximo de créditos por ciclo del plan (${cargaPlan}).</span></label>
+        <p class="meta" style="margin:0">Máximo por verano: 11 créditos.</p>
+      </div><button class="btn" id="guardar-config" style="margin-top:12px">Guardar configuración</button></section>
+      <section class="tarjeta"><h2 style="font-size:18px;margin-bottom:12px">Usuarios del panel</h2>
+        ${USUARIOS.map((u) => `<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 10px;padding:10px 0;border-top:1px solid #E5E2EB"><div style="min-width:0;overflow-wrap:anywhere"><b>${esc(u.nombre)}</b><div class="meta">${esc(u.correo)}</div></div><span class="rol ${u.rol === 'coordinacion' ? 'p-m' : 'p-ok'}">${esc(u.rolT)}</span></div>`).join('')}
+        <p class="meta">En el piloto, los roles se asignan por cuenta institucional.</p></section>
+      <section class="tarjeta"><h2 style="font-size:18px;margin-bottom:12px">Integración con la intranet</h2>
+        <p class="meta">En el piloto, TI informará quién se matriculó. Aquí puedes simularlo para la demostración.</p>
+        <button class="btn sec" id="sincronizar">Simular datos de matrícula de TI</button>
+        <hr style="border:0;border-top:1px solid #E5E2EB;margin:16px 0">
+        <button class="btn-texto" id="reiniciar" style="color:#7A2419">Restablecer datos de demostración</button></section>
+      </div>`;
+  }
+  function guardarConfig() {
+    const c = CA.leer();
+    c.fase = $('c-fase').value; ['inicio', 'cierre', 'horarios', 'matInicio', 'matFin'].forEach((k) => { c[k] = $('c-' + k).value || c[k]; });
+    c.minimoDefecto = Math.max(1, +$('c-minimo').value || 15); c.carga = +$('c-carga').value || null;
+    CA.guardar(c); toast('Configuración guardada. El portal del estudiante ya usa estos valores.');
+  }
+  function sincronizar() {
+    const c = CA.leer(); let n = 0;
+    CA.vigentes().forEach((s) => { if (s.seguimiento.estado === 'orientado' && s.cursos.some((x) => CA.estadoCurso(c, x.codigo) === 'abierto')) { CA.actualizarSeguimiento(s.id, { estado: 'matriculado' }, 'Intranet (TI)', 'Matrícula confirmada por la intranet'); n++; } });
+    toast(n ? `${n} ${n === 1 ? 'estudiante marcado' : 'estudiantes marcados'} como matriculados.` : 'No hay estudiantes orientados con cursos abiertos todavía.');
+  }
+
+  // ---------------- Eventos ----------------
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('button, a'); if (!b) return;
+    if (b.id === 'btn-google') selector();
+    else if (b.dataset.usuario) entrar(b.dataset.usuario);
+    else if (b.hasAttribute('data-cerrar')) $('modal').innerHTML = '';
+    else if (b.id === 'btn-salir') { sessionStorage.removeItem('uc_proto_panel'); U = null; ingreso(); }
+    else if (b.dataset.vista) ir(b.dataset.vista);
+    else if (b.dataset.verEstudiantes) { filtro = { curso: b.dataset.verEstudiantes, estado: '', pref: '', q: '' }; ir('estudiantes'); }
+    else if (b.dataset.contactar) contactar(b.dataset.contactar, b.dataset.canal);
+    else if (b.dataset.registrar) { if (b.hasAttribute('data-solo-registro')) e.preventDefault(); registrar(b.dataset.registrar, b.dataset.canal); }
+    else if (b.hasAttribute('data-copiar')) { try { navigator.clipboard.writeText($('modal').dataset.texto); } catch (x) {} toast('Mensaje copiado.'); }
+    else if (b.id === 'exportar') exportar();
+    else if (b.id === 'guardar-config') guardarConfig();
+    else if (b.id === 'sincronizar') sincronizar();
+    else if (b.id === 'reiniciar') { if (confirm('¿Restablecer todas las solicitudes y la configuración de la demostración?')) { CA.reiniciar(); toast('Datos de demostración restablecidos.'); ir('resumen'); } }
+    else if (b.dataset.agregarSec) {
+      const k = b.dataset.agregarSec, c = CA.leer(), secs = CA.seccionesCurso(c, k).slice();
+      const ini = document.querySelector(`[data-nueva-ini="${k}"]`).value, fin = document.querySelector(`[data-nueva-fin="${k}"]`).value;
+      if (!ini || !fin || fin <= ini) { toast('Revisa la hora de inicio y de fin.'); return; }
+      secs.push({ seccion: 'V-' + String(secs.length + 1).padStart(2, '0'), dia: +document.querySelector(`[data-nueva-dia="${k}"]`).value, hora_inicio: ini, hora_fin: fin, vacantes: 40 });
+      c.cursos[k] = { estado: CA.estadoCurso(c, k), secciones: secs }; CA.guardar(c); vDemanda(); toast('Sección agregada.');
+    }
+    else if (b.dataset.quitarSec) { const k = b.dataset.quitarSec, c = CA.leer(), secs = CA.seccionesCurso(c, k).slice(); secs.splice(+b.dataset.i, 1); secs.forEach((s, i) => { s.seccion = 'V-' + String(i + 1).padStart(2, '0'); }); c.cursos[k] = { estado: CA.estadoCurso(c, k), secciones: secs }; CA.guardar(c); vDemanda(); }
+  });
+  document.addEventListener('change', (e) => {
+    const t = e.target;
+    if (t.dataset.minimo) { const c = CA.leer(); c.minimos[t.dataset.minimo] = Math.max(1, +t.value || 1); CA.guardar(c); vDemanda(); }
+    else if (t.dataset.estado) { const n = CA.decidirCurso(t.dataset.estado, t.value, null, U.nombre); vDemanda(); if (t.value !== 'por_decidir') toast(`Curso marcado como ${CA.ESTADOS_CURSO[t.value].toLowerCase()}. Se registró el correo automático a ${n} ${n === 1 ? 'estudiante' : 'estudiantes'}.`); }
+    else if (t.dataset.seguimiento) { CA.actualizarSeguimiento(t.dataset.seguimiento, { estado: t.value }, `${U.nombre} (${U.rolT})`, `Seguimiento: ${CA.SEGUIMIENTO[t.value]}`); toast('Seguimiento actualizado.'); }
+    else if (t.dataset.notas !== undefined) { CA.actualizarSeguimiento(t.dataset.notas, { notas: t.value }, `${U.nombre} (${U.rolT})`, 'Notas actualizadas'); toast('Notas guardadas.'); }
+    else if (t.id === 'f-curso' || t.id === 'f-estado' || t.id === 'f-pref') { filtro[{ 'f-curso': 'curso', 'f-estado': 'estado', 'f-pref': 'pref' }[t.id]] = t.value; vEstudiantes(); }
+  });
+  document.addEventListener('input', (e) => { if (e.target.id === 'f-q') { filtro.q = e.target.value; clearTimeout(window._q); window._q = setTimeout(() => { vEstudiantes(); const q = $('f-q'); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }, 300); } });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('modal').innerHTML) $('modal').innerHTML = ''; });
+
+  CA.solicitudes();
+  const previo = sessionStorage.getItem('uc_proto_panel');
+  if (previo && USUARIOS.some((u) => u.id === previo)) entrar(previo); else ingreso();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Mi verano · Universidad Continental</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=DM+Sans:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'DM Sans',system-ui,sans-serif;font-size:16px;line-height:1.55;color:#15111C;background:#fff;overflow-x:hidden}
+a{color:#6A00BE}a:hover{color:#4B0087}
+button{font-family:inherit}
+:focus-visible{outline:3px solid #F2A900;outline-offset:2px;box-shadow:0 0 0 2px #120C1C;border-radius:6px}
+@keyframes ucIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;background:#fff">
+<div role="note" style="background:#F3ECFB;color:#4B0087;font-size:14px;padding:9px 16px;display:flex;justify-content:center;flex-wrap:wrap;gap:4px 10px;align-items:center;text-align:center"><b style="background:#4B0087;color:#fff;padding:2px 8px;border-radius:999px;font-size:12px;letter-spacing:.04em">DEMO</b><span><b>Prototipo con datos de demostración.</b> El ingreso, los estudiantes, la oferta y las solicitudes son de demostración. No se envía nada a la universidad.</span> <a href="panel.html" style="color:#4B0087;font-weight:700">Ver panel de coordinación</a></div>
+<header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-bottom:1px solid #ECE6F3">
+<div style="max-width:1280px;margin:0 auto;padding:0 {{ padX }};min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+<a href="index.html" aria-label="Volver a la página de cursos de verano" style="display:flex;align-items:center"><img src="https://adistancia.ucontinental.edu.pe/assets/img/logo.svg" alt="Universidad Continental · Modalidad A Distancia" style="height:42px;width:auto"></a>
+<sc-if value="{{ sesion }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:12px">
+<sc-if value="{{ escritorio }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:#575163">{{ nombreCompleto }}</span></sc-if>
+<span aria-hidden="true" style="width:40px;height:40px;border-radius:999px;background:#6A00BE;color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px Sora,sans-serif">{{ iniciales }}</span>
+<button type="button" onClick="{{ salir }}" style="min-height:44px;padding:0 8px;background:none;border:0;color:#6A00BE;font-weight:700;font-size:14px;text-decoration:underline;cursor:pointer">Cerrar sesión</button>
+</div>
+</sc-if>
+</div>
+</header>
+
+<sc-if value="{{ cargando }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:80px 20px;color:#575163;font-size:15px" role="status">Cargando tu información…</div>
+</sc-if>
+
+<sc-if value="{{ verIngreso }}" hint-placeholder-val="{{ true }}">
+<section style="flex:1;display:grid;grid-template-columns:{{ heroCols }}">
+<div style="background:#6A00BE;color:#fff;padding:{{ heroPad }};display:flex;flex-direction:column;gap:20px;justify-content:center">
+<span style="align-self:flex-start;padding:6px 14px;border-radius:999px;background:#F2A900;color:#1A1A1A;font-weight:700;font-size:12.5px;letter-spacing:.05em">MI VERANO 2027</span>
+<h1 style="font:700 clamp(32px,4.6vw,48px)/1.12 Sora,sans-serif;margin:0;letter-spacing:-.01em;text-wrap:balance">Ingresa para simular y solicitar tus cursos de verano</h1>
+<p style="font-size:18px;color:#F1E7FB;max-width:46ch;margin:0">Verás tu avance, tu malla y los cursos que puedes llevar según tus prerrequisitos.</p>
+<div><button type="button" onClick="{{ abrirSelector }}" style="min-height:54px;padding:0 26px;border-radius:999px;border:0;background:#fff;color:#4B0087;font-weight:700;font-size:16px;cursor:pointer;display:inline-flex;align-items:center;gap:12px" style-hover="background:#F3ECFB"><span aria-hidden="true" style="width:28px;height:28px;border-radius:99px;background:#F3ECFB;color:#4B0087;display:flex;align-items:center;justify-content:center;font:700 14px Sora,sans-serif">G</span>Ingresar con Google (@continental.edu.pe)</button></div>
+<p style="font-size:14px;color:#E4D3FA;margin:0">Solo tú puedes ver tu información académica.</p>
+<sc-if value="{{ error }}" hint-placeholder-val="{{ false }}"><p style="margin:0;background:#FDE9E7;color:#7A2419;padding:12px 14px;border-radius:12px;font-weight:700">{{ error }}</p></sc-if>
+</div>
+<div style="position:relative;overflow:hidden;background:#120C1C;color:#fff;padding:{{ heroPad }};display:flex;flex-direction:column;justify-content:center;gap:28px;min-height:380px">
+<img src="https://ucontinental.edu.pe/site/wp-content/themes/salient-child/img/home-img-1.webp" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,12,28,.95) 0%,rgba(18,12,28,.86) 55%,rgba(18,12,28,.62) 100%)"></div>
+<div aria-hidden="true" style="position:relative;display:flex;gap:18px"><i style="width:6px;background:#F2A900;flex:none"></i><div style="display:flex;flex-direction:column;font-family:'Bebas Neue',sans-serif;letter-spacing:.02em"><span style="font-size:clamp(30px,4.4vw,52px);line-height:.95">Simula</span><span style="font-size:clamp(68px,9.5vw,124px);line-height:.9;color:#F2A900">Solicita</span><span style="font-size:clamp(30px,4.4vw,52px);line-height:.95">y matricúlate</span></div></div>
+<ol style="position:relative;list-style:none;margin:0;padding:18px 0 0;border-top:2px solid #6A00BE;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px">
+<sc-for list="{{ pasosIngreso }}" as="p" hint-placeholder-count="5"><li style="display:flex;gap:10px;align-items:center;font-size:14px;color:#E9E1F3"><span style="font:400 26px/1 'Bebas Neue',sans-serif;color:#F2A900">{{ p.n }}</span>{{ p.t }}</li></sc-for>
+</ol>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ sesion }}" hint-placeholder-val="{{ false }}">
+<section style="background:#6A00BE;color:#fff">
+<div style="max-width:1280px;margin:0 auto;padding:{{ stripPad }};display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:18px 32px">
+<div style="min-width:0"><h1 style="font:700 clamp(24px,3.4vw,32px)/1.15 Sora,sans-serif;margin:0 0 4px;color:#fff">Hola, {{ nombreCorto }}</h1><p style="margin:0;color:#F1E7FB;font-size:14.5px">{{ metaPerfil }}</p></div>
+<div style="display:grid;grid-template-columns:{{ kpiCols }};gap:10px 28px">
+<sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4"><div><div style="font-size:12.5px;color:#E4D3FA">{{ k.l }}</div><div style="font:400 32px/1.05 'Bebas Neue',sans-serif;letter-spacing:.02em;color:{{ k.c }}">{{ k.v }}</div></div></sc-for>
+</div>
+</div>
+<div role="progressbar" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="Avance de tu carrera" style="height:6px;background:rgba(255,255,255,.22)"><i style="display:block;height:100%;background:#F2A900;width:{{ pctW }};transition:width .6s"></i></div>
+</section>
+
+<nav aria-label="Pasos" style="position:sticky;top:72px;z-index:30;background:#fff;border-bottom:1px solid #ECE6F3;box-shadow:0 4px 14px rgba(18,12,28,.04)">
+<div style="max-width:1280px;margin:0 auto;padding:0 {{ padX }}">
+<sc-if value="{{ escritorio }}" hint-placeholder-val="{{ true }}">
+<ol style="list-style:none;margin:0;padding:0;display:flex;align-items:center">
+<sc-for list="{{ pasos }}" as="p" hint-placeholder-count="5">
+<li style="display:flex;align-items:center;flex:1">
+<button type="button" onClick="{{ p.go }}" aria-current="{{ p.cur }}" style="min-height:64px;display:flex;align-items:center;gap:10px;background:none;border:0;cursor:pointer;padding:0 4px;border-radius:10px" style-hover="background:#F8F7FA">
+<span style="width:34px;height:34px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;font:700 14px Sora,sans-serif;transition:all .2s;background:{{ p.cBg }};color:{{ p.cFg }};border:2px solid {{ p.cBd }};box-shadow:{{ p.halo }}">{{ p.n }}</span>
+<span style="font-size:15px;white-space:nowrap;color:{{ p.lFg }};font-weight:{{ p.lW }}">{{ p.t }}</span>
+</button>
+<sc-if value="{{ p.linea }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" style="flex:1;height:2px;margin:0 12px;min-width:16px;transition:background .3s;background:{{ p.lineaBg }}"></span></sc-if>
+</li>
+</sc-for>
+</ol>
+</sc-if>
+<sc-if value="{{ movil }}" hint-placeholder-val="{{ false }}">
+<div style="padding:10px 0;display:flex;align-items:center;gap:10px">
+<button type="button" onClick="{{ antGo }}" disabled="{{ sinAnt }}" aria-label="Paso anterior" style="width:44px;height:44px;flex:none;border-radius:999px;border:2px solid #D9C2F0;background:#fff;color:#4B0087;font:700 18px Sora,sans-serif;cursor:pointer;opacity:{{ antOp }}">‹</button>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:#575163"><span>Paso {{ pasoN }} de 5</span><span>{{ sigTxt }}</span></div>
+<div style="display:flex;gap:4px"><sc-for list="{{ pasos }}" as="p" hint-placeholder-count="5"><button type="button" onClick="{{ p.go }}" aria-label="{{ p.t }}" aria-current="{{ p.cur }}" style="flex:1;height:44px;border:0;padding:19px 0;background:none;cursor:pointer"><span style="display:block;height:6px;border-radius:99px;background:{{ p.segBg }}"></span></button></sc-for></div>
+<b style="font:700 16px Sora,sans-serif">{{ pasoT }}</b>
+</div>
+<button type="button" onClick="{{ sigGo }}" disabled="{{ sinSig }}" aria-label="Paso siguiente" style="width:44px;height:44px;flex:none;border-radius:999px;border:0;background:#6A00BE;color:#fff;font:700 18px Sora,sans-serif;cursor:pointer;opacity:{{ sigOp }}">›</button>
+</div>
+</sc-if>
+</div>
+</nav>
+
+<main style="flex:1;background:#FBFAFD">
+<div style="max-width:1280px;margin:0 auto;padding:{{ mainPad }}">
+<sc-if value="{{ noHabil }}" hint-placeholder-val="{{ false }}"><div role="alert" style="display:flex;gap:12px;align-items:flex-start;background:#FDE9E7;color:#7A2419;border-radius:14px;padding:14px 16px;margin-bottom:20px;font-size:15px"><span style="width:26px;height:26px;flex:none;border-radius:99px;background:#B3261E;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700">!</span><span><b>Tienes un impedimento de matrícula.</b> {{ habMsg }}</span></div></sc-if>
+<div style="display:grid;grid-template-columns:{{ gridCols }};gap:28px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:22px;min-width:0">
+
+<!-- 1 · MI AVANCE -->
+<sc-if value="{{ esAvance }}" hint-placeholder-val="{{ false }}">
+<div><h2 style="font:700 clamp(26px,3.4vw,34px)/1.2 Sora,sans-serif;margin:0 0 6px">Mi avance</h2><p style="margin:0;color:#575163;max-width:70ch">Tu situación según tu historial académico al periodo {{ periodo }}.</p></div>
+<section aria-label="Escenarios de egreso" style="background:#120C1C;color:#fff;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><h3 style="font:700 20px Sora,sans-serif;margin:0">¿Cuándo podrías terminar tu carrera?</h3><span style="padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.12);font-size:12.5px;font-weight:700;color:#E9E1F3">Estimación referencial</span></div>
+<div style="display:grid;grid-template-columns:{{ escCols }};gap:10px">
+<sc-for list="{{ escenarios }}" as="e" hint-placeholder-count="3"><div style="border-radius:14px;padding:14px 16px;background:{{ e.bg }};border:1px solid {{ e.bd }};display:flex;flex-direction:column;gap:6px;min-width:0"><span style="font-size:13.5px;color:#D9C2F0">{{ e.etiqueta }}</span><b style="font:400 30px/1.05 'Bebas Neue',sans-serif;letter-spacing:.03em;color:{{ e.c }}">{{ e.termina }}</b><span style="font-size:13.5px;color:#E9E1F3">{{ e.nota }}</span></div></sc-for>
+</div>
+<p style="margin:0;font-size:13px;color:#D9C2F0">{{ escNota }}</p>
+<div><button type="button" onClick="{{ irVerano }}" style="min-height:50px;padding:0 24px;border-radius:999px;border:0;background:#F2A900;color:#1A1A1A;font-weight:700;font-size:15px;cursor:pointer" style-hover="background:#FFC23D">{{ escCta }}</button></div>
+</section>
+<div style="background:#fff;border:1px solid #E5E2EB;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:16px">
+<h3 style="font:700 18px Sora,sans-serif;margin:0">Tu historial</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+<sc-for list="{{ historial }}" as="h" hint-placeholder-count="3"><div style="border-radius:14px;padding:14px 16px;background:{{ h.bg }}"><div style="font:400 44px/1 'Bebas Neue',sans-serif;color:{{ h.c }}">{{ h.v }}</div><div style="font-size:14px;color:#3E3850">{{ h.l }}</div></div></sc-for>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:{{ avCols }};gap:22px;align-items:start">
+<div style="background:#fff;border:1px solid #E5E2EB;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:14px">
+<h3 style="font:700 18px Sora,sans-serif;margin:0">Te recomendamos</h3>
+<sc-if value="{{ hayRecs }}" hint-placeholder-val="{{ true }}">
+<ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ recs }}" as="r" hint-placeholder-count="3"><li style="display:flex;gap:12px;align-items:flex-start"><span style="width:30px;height:30px;flex:none;border-radius:99px;display:flex;align-items:center;justify-content:center;font:400 20px/1 'Bebas Neue',sans-serif;background:{{ r.bg }};color:{{ r.fg }}">{{ r.n }}</span><span style="font-size:15px;padding-top:3px">{{ r.pre }}<b>{{ r.b }}</b>{{ r.post }}</span></li></sc-for>
+</ol>
+</sc-if>
+<sc-if value="{{ sinRecs }}" hint-placeholder-val="{{ false }}"><p style="margin:0">Sigue con tu plan de estudios.</p></sc-if>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<button type="button" onClick="{{ irVerano }}" style="min-height:52px;padding:0 26px;border-radius:999px;border:2px solid #6A00BE;background:#6A00BE;color:#fff;font-weight:700;font-size:15.5px;cursor:pointer" style-hover="background:#4B0087;border-color:#4B0087">Simular mi verano</button>
+<button type="button" onClick="{{ irMalla }}" style="min-height:52px;padding:0 26px;border-radius:999px;border:2px solid #6A00BE;background:#fff;color:#4B0087;font-weight:700;font-size:15.5px;cursor:pointer" style-hover="background:#F3ECFB">Ver mi malla</button>
+</div>
+</sc-if>
+
+<!-- 2 · MI MALLA -->
+<sc-if value="{{ esMalla }}" hint-placeholder-val="{{ false }}">
+<div><h2 style="font:700 clamp(26px,3.4vw,34px)/1.2 Sora,sans-serif;margin:0 0 6px">Mi malla curricular</h2><p style="margin:0;color:#575163">{{ mallaIntro }}</p></div>
+<div style="display:grid;grid-template-columns:{{ mallaCols }};gap:20px;align-items:start">
+<div style="background:#fff;border:1px solid #E5E2EB;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0">
+<div style="display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13.5px">
+<sc-for list="{{ leyenda }}" as="l" hint-placeholder-count="4"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:14px;border-radius:4px;background:{{ l.bg }};border:1px solid {{ l.bd }}"></i>{{ l.t }}</span></sc-for>
+<sc-if value="{{ haySelMalla }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:14px;border-radius:4px;border:3px solid #F2A900"></i>Prerrequisito</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:14px;height:14px;border-radius:4px;border:3px dashed #6A00BE"></i>Lo habilita</span></sc-if>
+</div>
+<div style="overflow-x:auto;padding-bottom:6px" tabindex="0" aria-label="Malla por ciclos, desplazable horizontalmente">
+<div style="display:flex;gap:10px;min-width:max-content">
+<sc-for list="{{ ciclos }}" as="ci" hint-placeholder-count="10">
+<div style="width:{{ mallaColW }};display:flex;flex-direction:column;gap:8px">
+<div style="font:700 13px Sora,sans-serif;text-align:center;padding:6px;border-radius:8px;background:#F3ECFB;color:#4B0087">Ciclo {{ ci.n }}</div>
+<sc-for list="{{ ci.cursos }}" as="c" hint-placeholder-count="5">
+<button type="button" onClick="{{ c.go }}" aria-pressed="{{ c.pressed }}" style="display:block;width:100%;text-align:left;border-radius:10px;padding:8px 10px;font:500 12.5px/1.3 'DM Sans',sans-serif;cursor:pointer;min-height:48px;transition:opacity .2s,outline-color .2s;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }};outline:{{ c.ol }};outline-offset:1px;opacity:{{ c.op }}">{{ c.nombre }}<small style="display:block;font-size:11.5px;opacity:.9;margin-top:2px">{{ c.meta }}</small></button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+<div aria-live="polite" style="position:sticky;top:156px;background:#fff;border:2px solid #6A00BE;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px">
+<sc-if value="{{ sinSelMalla }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:8px"><span style="font:400 22px/1 'Bebas Neue',sans-serif;color:#6A00BE;letter-spacing:.04em">Detalle del curso</span><p style="margin:0;color:#575163;font-size:14.5px">Toca un curso para ver sus prerrequisitos.</p></div></sc-if>
+<sc-if value="{{ haySelMalla }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><h3 style="font:700 18px/1.3 Sora,sans-serif;margin:0">{{ md.nombre }}</h3><button type="button" onClick="{{ limpiarMalla }}" aria-label="Cerrar detalle" style="width:44px;height:44px;flex:none;border-radius:99px;border:0;background:#F3ECFB;color:#4B0087;font:700 18px Sora,sans-serif;cursor:pointer">×</button></div>
+<p style="margin:0;font-size:13.5px;color:#575163">{{ md.meta }}</p>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><span style="padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ md.eBg }};color:{{ md.eFg }}">{{ md.estado }}</span><sc-if value="{{ md.clave }}" hint-placeholder-val="{{ false }}"><span style="padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:700;background:#F2A900;color:#1A1A1A">Curso clave</span></sc-if></div>
+<div style="border-top:1px solid #E5E2EB;padding-top:12px;display:flex;flex-direction:column;gap:10px;font-size:14.5px">
+<div><b>Prerrequisitos:</b> {{ md.req }}</div>
+<div><b>Habilita:</b> {{ md.habilita }} asignaturas posteriores</div>
+<div><b>En verano 2027:</b> {{ md.verano }}</div>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- 3 · CURSOS DE VERANO -->
+<sc-if value="{{ esVerano }}" hint-placeholder-val="{{ false }}">
+<div><h2 style="font:700 clamp(26px,3.4vw,34px)/1.2 Sora,sans-serif;margin:0 0 6px">Cursos de verano 2027</h2><p style="margin:0;color:#575163;max-width:70ch">{{ veranoIntro }}</p></div>
+<div role="status" style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;background:{{ faseBg }};color:{{ faseFg }};border-radius:14px;padding:14px 16px;font-size:14.5px"><b>{{ faseT }}</b><span>{{ faseD }}</span></div>
+<sc-if value="{{ listaVacia }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:28px;text-align:center;color:#575163;background:#fff;border:1px dashed #CFC6DA;border-radius:16px">{{ vacioTxt }}</p></sc-if>
+<sc-for list="{{ cursos }}" as="c" hint-placeholder-count="4">
+<article style="background:{{ c.fondo }};border-radius:18px;overflow:hidden;border:{{ c.borde }};transition:border-color .2s,box-shadow .2s;box-shadow:{{ c.sombra }}">
+<div style="display:flex;justify-content:space-between;gap:16px;padding:16px 18px">
+<div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+<h3 style="font:700 17.5px/1.3 Sora,sans-serif;margin:0">{{ c.nombre }}</h3>
+<span style="font-size:13px;color:#575163">{{ c.codigo }} · Ciclo {{ c.ciclo }}</span>
+<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+<sc-for list="{{ c.pills }}" as="p" hint-placeholder-count="1"><span style="padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ p.bg }};color:{{ p.fg }};border:1px solid {{ p.bd }}">{{ p.t }}</span></sc-for>
+<span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#3E3850;margin-left:4px"><i style="width:9px;height:9px;border-radius:99px;border:2px solid #6A00BE;background:{{ c.dot }}"></i>{{ c.ofertaTxt }}</span>
+</div>
+</div>
+<div style="text-align:right;flex:none"><div style="font:400 40px/0.9 'Bebas Neue',sans-serif;color:{{ c.crC }}">{{ c.cr }}</div><div style="font-size:12px;color:#575163">créditos</div></div>
+</div>
+<sc-if value="{{ c.cond }}" hint-placeholder-val="{{ false }}"><p style="margin:0 18px 12px;padding:10px 12px;border-radius:10px;background:#F3ECFB;color:#4B0087;font-size:14px">{{ c.condTxt }}</p></sc-if>
+<sc-if value="{{ c.bloq }}" hint-placeholder-val="{{ false }}"><p style="margin:0 18px 12px;padding:10px 12px;border-radius:10px;background:#FDE9E7;color:#7A2419;font-size:14px">{{ c.bloqTxt }}</p></sc-if>
+<sc-if value="{{ c.sinSec }}" hint-placeholder-val="{{ false }}">
+<div style="border-top:1px solid #E5E2EB;padding:12px 18px;display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;background:{{ c.sinSecBg }}">
+<div style="flex:1 1 240px"><b style="font:700 14.5px Sora,sans-serif">{{ c.sinSecT }}</b><div style="font-size:13.5px;color:#575163">{{ c.sinSecD }}</div></div>
+<sc-if value="{{ c.sinSecElegir }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ c.apertura }}" aria-label="Solicitar apertura de {{ c.nombre }}" style="flex:0 1 190px;min-height:46px;padding:0 18px;border-radius:999px;border:2px solid #6A00BE;background:#6A00BE;color:#fff;font-weight:700;font-size:14px;cursor:pointer" style-hover="background:#4B0087">Solicitar apertura</button></sc-if>
+<sc-if value="{{ c.sinSecQuitar }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ c.quitar }}" style="flex:0 1 190px;min-height:46px;padding:0 18px;border-radius:999px;border:2px solid #6A00BE;background:#fff;color:#4B0087;font-weight:700;font-size:14px;cursor:pointer" style-hover="background:#F3ECFB">✓ Solicitado · Quitar</button></sc-if>
+</div>
+</sc-if>
+<sc-for list="{{ c.secciones }}" as="s" hint-placeholder-count="1">
+<div style="border-top:1px solid #E5E2EB;padding:12px 18px;display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;background:{{ s.rowBg }};box-shadow:{{ s.rowSh }}">
+<div style="flex:0 0 auto;display:flex;flex-direction:column;gap:6px;min-width:150px"><b style="font:700 14.5px Sora,sans-serif">Sección {{ s.sec }}</b><div style="display:flex;gap:3px" aria-hidden="true"><sc-for list="{{ s.dias }}" as="d" hint-placeholder-count="6"><span style="width:22px;height:24px;border-radius:5px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;background:{{ d.bg }};color:{{ d.fg }}">{{ d.l }}</span></sc-for></div></div>
+<div style="flex:1 1 210px;font-size:14px;line-height:1.45"><sc-for list="{{ s.lines }}" as="ln" hint-placeholder-count="1"><div>{{ ln }}</div></sc-for><span style="color:#575163;font-size:13px">{{ s.libres }} vacantes de {{ s.tot }}</span></div>
+<sc-if value="{{ s.prim }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ s.elegir }}" aria-label="{{ s.aria }}" style="flex:0 1 170px;min-height:46px;padding:0 18px;border-radius:999px;border:2px solid #6A00BE;background:#6A00BE;color:#fff;font-weight:700;font-size:14px;cursor:pointer" style-hover="background:#4B0087">{{ s.btn }}</button></sc-if>
+<sc-if value="{{ s.act }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ s.quitar }}" style="flex:0 1 170px;min-height:46px;padding:0 18px;border-radius:999px;border:2px solid {{ s.qBd }};background:#fff;color:{{ s.qFg }};font-weight:700;font-size:14px;cursor:pointer" style-hover="background:#F8F7FA">✓ Elegida · Quitar</button></sc-if>
+<sc-if value="{{ s.cruce }}" hint-placeholder-val="{{ false }}"><div style="flex:1 1 100%;font-size:13.5px;color:#6B4200;font-weight:700">ⓘ Su sesión en vivo coincide con {{ s.cruceTxt }}. No hay problema: ambas quedan grabadas.</div></sc-if>
+</div>
+</sc-for>
+</article>
+</sc-for>
+</sc-if>
+
+<!-- 4 · MI HORARIO -->
+<sc-if value="{{ esHorario }}" hint-placeholder-val="{{ false }}">
+<div><h2 style="font:700 clamp(26px,3.4vw,34px)/1.2 Sora,sans-serif;margin:0 0 6px">Mi horario de verano</h2><p style="margin:0;color:#575163;max-width:70ch">{{ hIntro }}</p></div>
+<sc-if value="{{ hayCruces }}" hint-placeholder-val="{{ false }}"><div role="status" style="display:flex;gap:12px;align-items:flex-start;background:#FFF3D6;color:#6B4200;border-radius:14px;padding:14px 16px;font-size:15px"><span style="width:26px;height:26px;flex:none;border-radius:99px;background:#F2A900;color:#1A1A1A;display:flex;align-items:center;justify-content:center;font-weight:700">i</span><span><b>Sesiones en vivo que coinciden:</b> {{ crucesTxt }}. No hay problema: todas las sesiones se graban y puedes verlas después.</span></div></sc-if>
+<sc-if value="{{ sinCruces }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:12px;align-items:center;background:#E3F2EA;color:#145C34;border-radius:14px;padding:12px 16px;font-size:15px;font-weight:700"><span style="width:26px;height:26px;flex:none;border-radius:99px;background:#145C34;color:#fff;display:flex;align-items:center;justify-content:center">✓</span>Tus sesiones en vivo no coinciden.</div></sc-if>
+<sc-if value="{{ hEspera }}" hint-placeholder-val="{{ false }}"><div style="padding:28px;text-align:center;color:#3E3850;background:#F6F2FA;border-radius:16px;display:flex;flex-direction:column;gap:8px;align-items:center"><b style="font:700 18px Sora,sans-serif;color:#4B0087">{{ hEsperaT }}</b><span>{{ hEsperaD }}</span></div></sc-if>
+<sc-if value="{{ sinItems }}" hint-placeholder-val="{{ false }}"><div style="padding:32px;text-align:center;color:#575163;background:#fff;border:1px dashed #CFC6DA;border-radius:16px;display:flex;flex-direction:column;gap:12px;align-items:center"><span>Elige cursos en el paso 3 para ver tu horario.</span><button type="button" onClick="{{ irVerano }}" style="min-height:46px;padding:0 20px;border-radius:999px;border:2px solid #6A00BE;background:#6A00BE;color:#fff;font-weight:700;cursor:pointer">Ir a cursos de verano</button></div></sc-if>
+<sc-if value="{{ hayItems }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13.5px"><sc-for list="{{ leyendaH }}" as="l" hint-placeholder-count="3"><span style="display:inline-flex;align-items:center;gap:8px"><i style="width:14px;height:14px;border-radius:4px;background:{{ l.bg }}"></i>{{ l.t }}</span></sc-for></div>
+<sc-if value="{{ escritorio }}" hint-placeholder-val="{{ true }}">
+<div style="background:#fff;border:1px solid #E5E2EB;border-radius:18px;overflow:hidden">
+<div style="display:grid;grid-template-columns:60px repeat(6,minmax(0,1fr));background:#120C1C;color:#fff"><span></span><sc-for list="{{ hDias }}" as="d" hint-placeholder-count="6"><div style="padding:12px 4px;text-align:center;font:700 13.5px Sora,sans-serif;border-left:1px solid rgba(255,255,255,.1)">{{ d.nombre }}<div style="font:500 11.5px 'DM Sans',sans-serif;color:#D9C2F0">{{ d.cuenta }}</div></div></sc-for></div>
+<div style="display:grid;grid-template-columns:60px repeat(6,minmax(0,1fr))">
+<div><sc-for list="{{ horas }}" as="h" hint-placeholder-count="16"><div style="height:36px;font-size:11.5px;color:#575163;text-align:right;padding:2px 8px 0 0;border-top:1px solid #EFEBF4">{{ h }}</div></sc-for></div>
+<sc-for list="{{ hDias }}" as="d" hint-placeholder-count="6">
+<div style="position:relative;height:576px;border-left:1px solid #EFEBF4;background:repeating-linear-gradient(to bottom,#EFEBF4 0,#EFEBF4 1px,transparent 1px,transparent 36px);background-color:{{ d.fondo }}">
+<sc-for list="{{ d.blocks }}" as="b" hint-placeholder-count="0"><div title="{{ b.nombre }}" style="position:absolute;border-radius:8px;padding:5px 7px;font-size:11.5px;line-height:1.25;color:#fff;overflow:hidden;box-shadow:0 2px 6px rgba(18,12,28,.18);top:{{ b.top }};height:{{ b.height }};left:{{ b.left }};width:{{ b.width }};background:{{ b.bg }}"><sc-if value="{{ b.cruce }}" hint-placeholder-val="{{ false }}"><b style="display:inline-block;background:#fff;color:#7A2419;border-radius:4px;padding:0 4px;font-size:10.5px;margin-bottom:2px">CRUCE</b></sc-if><b style="display:block">{{ b.nombre }}</b>{{ b.hora }} · {{ b.sec }}</div></sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ movil }}" hint-placeholder-val="{{ false }}">
+<div role="tablist" aria-label="Días" style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px">
+<sc-for list="{{ hDias }}" as="d" hint-placeholder-count="6"><button type="button" role="tab" aria-selected="{{ d.on }}" onClick="{{ d.go }}" style="min-height:56px;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:700;font-size:13px;background:{{ d.tBg }};color:{{ d.tFg }};border:2px solid {{ d.tBd }}">{{ d.corto }}<span style="width:8px;height:8px;border-radius:99px;background:{{ d.dot }}"></span></button></sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-if value="{{ diaVacio }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:20px;text-align:center;color:#575163;background:#fff;border:1px dashed #CFC6DA;border-radius:14px">Sin clases este día.</p></sc-if>
+<sc-for list="{{ agenda }}" as="a" hint-placeholder-count="2"><div style="display:flex;gap:12px;align-items:stretch;background:#fff;border:1px solid #E5E2EB;border-radius:14px;overflow:hidden"><span style="width:6px;flex:none;background:{{ a.bg }}"></span><div style="padding:12px 12px 12px 0;display:flex;flex-direction:column;gap:2px"><span style="font:400 22px/1 'Bebas Neue',sans-serif;letter-spacing:.03em;color:{{ a.hc }}">{{ a.hora }}</span><b style="font-size:15px">{{ a.nombre }}</b><span style="font-size:13px;color:#575163">Sección {{ a.sec }}</span><sc-if value="{{ a.cruce }}" hint-placeholder-val="{{ false }}"><b style="font-size:13px;color:#7A2419">⚠ Se cruza con otro curso</b></sc-if></div></div></sc-for>
+</div>
+</sc-if>
+</sc-if>
+<sc-if value="{{ haySinH }}" hint-placeholder-val="{{ false }}"><div style="background:#F3ECFB;color:#4B0087;border-radius:14px;padding:14px 16px;font-size:15px"><b>Sin horario todavía:</b> {{ sinHTxt }}. Se incluyen en tu solicitud como pedido de apertura.</div></sc-if>
+</sc-if>
+
+<!-- 5 · MI SOLICITUD -->
+<sc-if value="{{ esSolVacia }}" hint-placeholder-val="{{ false }}">
+<h2 style="font:700 clamp(26px,3.4vw,34px)/1.2 Sora,sans-serif;margin:0">Mi solicitud</h2>
+<div style="padding:32px;text-align:center;color:#575163;background:#fff;border:1px dashed #CFC6DA;border-radius:16px;display:flex;flex-direction:column;gap:12px;align-items:center"><span>{{ solVaciaTxt }}</span><button type="button" onClick="{{ irVerano }}" style="min-height:46px;padding:0 20px;border-radius:999px;border:2px solid #6A00BE;background:#6A00BE;color:#fff;font-weight:700;cursor:pointer">Ir a cursos de verano</button></div>
+</sc-if>
+
+<sc-if value="{{ esSolRevision }}" hint-placeholder-val="{{ false }}">
+<div><h2 style="font:700 clamp(26px,3.4vw,34px)/1.2 Sora,sans-serif;margin:0 0 6px">Revisa y envía tu solicitud</h2><p style="margin:0;color:#575163;max-width:70ch">Tu solicitud nos ayuda a decidir qué cursos abrir. <b style="color:#15111C">No es una matrícula:</b> te matriculas después en la intranet, en las fechas oficiales.</p></div>
+<div style="display:grid;grid-template-columns:{{ solCols }};gap:24px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+<div style="background:#fff;border:1px solid #E5E2EB;border-radius:20px;overflow:hidden">
+<div style="padding:14px 18px;background:#F3ECFB;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><b style="font:700 16px Sora,sans-serif;color:#4B0087">Cursos de tu solicitud</b><span style="font-size:14px;color:#4B0087">{{ solCuenta }}</span></div>
+<sc-for list="{{ solItems }}" as="i" hint-placeholder-count="3">
+<div style="display:flex;flex-wrap:wrap;gap:10px 22px;padding:14px 18px;border-top:1px solid #E5E2EB;align-items:flex-start">
+<div style="flex:1 1 220px;min-width:0"><b style="font-size:15.5px">{{ i.nombre }}</b><div style="font-size:13px;color:#575163">{{ i.sub }}</div></div>
+<div style="flex:1 1 200px;font-size:14px"><b>{{ i.secTxt }}</b><div style="font-size:13px;color:#575163">{{ i.horario }}</div></div>
+<div style="flex:0 0 150px;font-size:13.5px;color:#3E3850">{{ i.oferta }}</div>
+<div style="flex:0 0 auto;text-align:right"><span style="font:400 28px/1 'Bebas Neue',sans-serif;color:#6A00BE">{{ i.cr }}</span> <span style="font-size:12px;color:#575163">cr.</span></div>
+</div>
+</sc-for>
+</div>
+<div style="background:#fff;border:1px solid #E5E2EB;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px">
+<h3 style="font:700 18px Sora,sans-serif;margin:0">Validaciones</h3>
+<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:14.5px">
+<sc-for list="{{ validAll }}" as="v" hint-placeholder-count="6"><li style="display:flex;gap:10px;align-items:flex-start"><span style="width:22px;height:22px;flex:none;border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:{{ v.bg }};color:{{ v.fg }}">{{ v.m }}</span><span style="font-weight:{{ v.w }};color:{{ v.tc }}">{{ v.t }}</span></li></sc-for>
+</ul>
+</div>
+</div>
+<aside style="position:sticky;top:156px;background:#120C1C;color:#fff;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:16px">
+<h3 style="font:700 18px Sora,sans-serif;margin:0">Resumen</h3>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font:400 60px/0.85 'Bebas Neue',sans-serif;color:#F2A900">{{ credSel }}</span><span style="font-size:15px;color:#E9E1F3">créditos en {{ solCuenta }}</span></div>
+<div style="background:rgba(255,255,255,.07);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:4px"><span style="font-size:13px;color:#D9C2F0">Costo referencial</span><b style="font:400 32px/1 'Bebas Neue',sans-serif;letter-spacing:.03em">{{ costoTotal }}</b><span style="font-size:13px;color:#D9C2F0">Ejemplo a {{ costoUnit }} por crédito. El monto real depende de tu escala de pagos.</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="background:rgba(255,255,255,.07);border-radius:12px;padding:10px 12px"><div style="font-size:12.5px;color:#D9C2F0">Sin verano</div><div style="font:400 24px/1.1 'Bebas Neue',sans-serif">{{ prSin }}</div></div><div style="background:rgba(255,255,255,.07);border-radius:12px;padding:10px 12px"><div style="font-size:12.5px;color:#D9C2F0">Con esta solicitud</div><div style="font:400 24px/1.1 'Bebas Neue',sans-serif;color:#F2A900">{{ prCon }}</div></div></div>
+<span style="font-size:12.5px;color:#D9C2F0;margin-top:-8px">Estimación referencial.</span>
+<div style="display:flex;flex-direction:column;gap:8px">
+<label for="uc-celular" style="font-size:13.5px;color:#D9C2F0;font-weight:700">Celular para WhatsApp o llamada</label>
+<input id="uc-celular" type="tel" inputmode="tel" autocomplete="tel" value="{{ celular }}" onChange="{{ setCelular }}" placeholder="51 9XX XXX XXX" style="min-height:46px;border-radius:12px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;padding:0 14px;font-size:15px">
+<span id="uc-pref" style="font-size:13.5px;color:#D9C2F0;font-weight:700;margin-top:4px">¿Cómo prefieres que te contactemos?</span>
+<div role="radiogroup" aria-labelledby="uc-pref" style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ prefs }}" as="pf" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{ pf.on }}" onClick="{{ pf.go }}" style="min-height:44px;padding:0 14px;border-radius:999px;border:2px solid {{ pf.bd }};background:{{ pf.bg }};color:{{ pf.fg }};font-weight:700;font-size:14px;cursor:pointer">{{ pf.t }}</button></sc-for></div>
+<span style="font-size:12.5px;color:#D9C2F0">{{ editableTxt }}</span>
+</div>
+<label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-size:14px;color:#E9E1F3;min-height:44px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.18)"><input type="checkbox" checked="{{ acepta }}" onChange="{{ toggleAcepta }}" style="width:22px;height:22px;margin:1px 0 0;flex:none;accent-color:#F2A900"><span>Autorizo el uso de mis datos para registrar mi solicitud y ser contactado sobre la apertura de cursos.</span></label>
+<p role="status" aria-live="polite" style="margin:0;font-size:14px;font-weight:700;color:#FFB4AB;min-height:1em">{{ msgSol }}</p>
+<button type="button" onClick="{{ enviar }}" disabled="{{ noEnviar }}" style="min-height:54px;border-radius:999px;border:0;background:#F2A900;color:#1A1A1A;font-weight:700;font-size:16px;cursor:pointer;opacity:{{ enviarOp }}" style-hover="background:#FFC23D">{{ enviarTxt }}</button>
+<button type="button" onClick="{{ irVerano }}" style="min-height:44px;border-radius:999px;border:0;background:none;color:#fff;font-weight:700;font-size:14px;text-decoration:underline;cursor:pointer">Seguir editando</button>
+</aside>
+</div>
+</sc-if>
+
+<sc-if value="{{ esConfirmacion }}" hint-placeholder-val="{{ false }}">
+<div style="position:relative;overflow:hidden;background:#120C1C;color:#fff;border-radius:24px;padding:{{ confPad }};display:grid;grid-template-columns:{{ confCols }};gap:24px 40px;align-items:center">
+<div style="position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:999px;border:28px solid rgba(106,0,190,.45)"></div>
+<div style="position:relative;display:flex;flex-direction:column;gap:12px">
+<span style="align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:#E3F2EA;color:#145C34;font-weight:700;font-size:13.5px"><span style="width:20px;height:20px;border-radius:99px;background:#145C34;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px">✓</span>Registrada</span>
+<h2 style="font:700 clamp(26px,3.4vw,36px)/1.15 Sora,sans-serif;margin:0;color:#fff">Tu solicitud está registrada</h2>
+<p style="margin:0;color:#E9E1F3">{{ confResumen }}</p>
+<p style="margin:0;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.08);color:#E9E1F3;font-size:14.5px"><b style="color:#fff">No es una matrícula:</b> te matriculas después en la intranet, en las fechas oficiales.</p>
+</div>
+<div style="position:relative;background:#fff;color:#15111C;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:8px;border-top:6px solid #F2A900">
+<span style="font-size:13px;font-weight:700;letter-spacing:.06em;color:#575163">NÚMERO DE SOLICITUD</span>
+<span style="font:400 clamp(40px,5vw,58px)/1 'Bebas Neue',sans-serif;letter-spacing:.04em;color:#4B0087;word-break:break-all">{{ solId }}</span>
+<button type="button" onClick="{{ copiar }}" style="align-self:flex-start;min-height:44px;padding:0 16px;border-radius:999px;border:2px solid #D9C2F0;background:#fff;color:#4B0087;font-weight:700;font-size:14px;cursor:pointer" style-hover="background:#F3ECFB">{{ copiarTxt }}</button>
+<span style="font-size:13px;color:#575163">Guárdalo: lo necesitarás si consultas por tu solicitud.</span>
+</div>
+</div>
+<sc-if value="{{ hayAvisos }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:8px"><sc-for list="{{ avisos }}" as="a" hint-placeholder-count="1"><div role="status" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;background:{{ a.bg }};color:{{ a.fg }};border-radius:14px;padding:12px 16px;font-size:14.5px"><b>{{ a.t }}</b><span>{{ a.d }}</span></div></sc-for></div></sc-if>
+<div style="display:grid;grid-template-columns:{{ solCols }};gap:24px;align-items:start">
+<div style="background:#fff;border:1px solid #E5E2EB;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:18px">
+<h3 style="font:700 20px Sora,sans-serif;margin:0">Qué sigue</h3>
+<ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+<sc-for list="{{ sigue }}" as="s" hint-placeholder-count="4">
+<li style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 16px">
+<div style="display:flex;flex-direction:column;align-items:center"><span style="width:44px;height:44px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;font:400 22px/1 'Bebas Neue',sans-serif;background:{{ s.nBg }};color:{{ s.nFg }};border:2px solid {{ s.nBd }}">{{ s.n }}</span><sc-if value="{{ s.linea }}" hint-placeholder-val="{{ true }}"><span style="flex:1;width:3px;min-height:16px;border-radius:2px;background:{{ s.lBg }}"></span></sc-if></div>
+<div style="padding:4px 0 22px"><div style="display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center"><b style="font:700 16px Sora,sans-serif">{{ s.t }}</b><sc-if value="{{ s.fecha }}" hint-placeholder-val="{{ false }}"><span style="padding:2px 10px;border-radius:999px;font-size:12.5px;font-weight:700;background:{{ s.fBg }};color:{{ s.fFg }}">{{ s.fecha }}</span></sc-if></div><p style="margin:4px 0 0;color:#575163;font-size:15px">{{ s.d }}</p></div>
+</li>
+</sc-for>
+</ol>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<button type="button" onClick="{{ pdf }}" style="min-height:52px;padding:0 24px;border-radius:999px;border:0;background:#F2A900;color:#1A1A1A;font-weight:700;font-size:15px;cursor:pointer" style-hover="background:#FFC23D">{{ pdfTxt }}</button>
+<a href="{{ intranet }}" target="_blank" rel="noopener" style="min-height:52px;padding:0 24px;border-radius:999px;border:2px solid #6A00BE;background:#fff;color:#4B0087;font-weight:700;font-size:15px;text-decoration:none;display:inline-flex;align-items:center" style-hover="background:#F3ECFB;color:#4B0087">Ir a la intranet ↗</a>
+</div>
+</div>
+<aside style="background:#fff;border:2px solid #6A00BE;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:6px">
+<h3 style="font:700 18px Sora,sans-serif;margin:0 0 6px">Tus cursos</h3>
+<sc-for list="{{ confCursos }}" as="c" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #E5E2EB"><div><b style="font-size:14.5px">{{ c.nombre }}</b><div style="font-size:13px;color:#575163">{{ c.meta }}</div></div><span style="font:400 24px/1 'Bebas Neue',sans-serif;color:#6A00BE">{{ c.cr }}</span></div></sc-for>
+<sc-if value="{{ puedeEditar }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ editar }}" style="margin-top:10px;min-height:48px;border-radius:999px;border:2px solid #6A00BE;background:#fff;color:#4B0087;font-weight:700;font-size:14.5px;cursor:pointer" style-hover="background:#F3ECFB">{{ editarTxt }}</button></sc-if>
+<sc-if value="{{ puedeRetirar }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ retirar }}" style="min-height:44px;border-radius:999px;border:0;background:none;color:#7A2419;font-weight:700;font-size:14px;text-decoration:underline;cursor:pointer">Retirar mi solicitud</button></sc-if>
+</aside>
+</div>
+</sc-if>
+
+<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid #E5E2EB;padding-top:20px;margin-top:6px">
+<sc-if value="{{ hayAnt }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ antGo }}" style="min-height:48px;padding:0 18px;border-radius:999px;border:2px solid #D9C2F0;background:#fff;color:#4B0087;font-weight:700;font-size:14.5px;cursor:pointer" style-hover="background:#F3ECFB">← {{ antT }}</button></sc-if>
+<span></span>
+<sc-if value="{{ haySig }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ sigGo }}" style="min-height:48px;padding:0 20px;border-radius:999px;border:2px solid #6A00BE;background:#6A00BE;color:#fff;font-weight:700;font-size:14.5px;cursor:pointer" style-hover="background:#4B0087">Siguiente: {{ sigT }} →</button></sc-if>
+</div>
+</div>
+
+<sc-if value="{{ conSel }}" hint-placeholder-val="{{ false }}">
+<aside ref="{{ asideRef }}" aria-label="Mi selección" style="position:{{ asidePos }};top:156px;background:#120C1C;color:#fff;border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="font:700 18px Sora,sans-serif;margin:0">Mi selección</h3><span style="font-size:13px;color:#D9C2F0">{{ selCuenta }}</span></div>
+<div>
+<div style="display:flex;align-items:baseline;gap:8px"><span style="font:400 64px/0.85 'Bebas Neue',sans-serif;color:{{ credC }}">{{ credSel }}</span><span style="font:400 28px/1 'Bebas Neue',sans-serif">/ {{ credMax }} créditos</span></div>
+<div role="meter" aria-valuenow="{{ credSel }}" aria-valuemin="0" aria-valuemax="{{ credMax }}" aria-label="Créditos elegidos" style="display:grid;grid-template-columns:{{ segCols }};gap:3px;margin-top:12px"><sc-for list="{{ segs }}" as="g" hint-placeholder-count="11"><span style="height:14px;border-radius:3px;transition:background .3s;background:{{ g.bg }}"></span></sc-for></div>
+<div style="font-size:13px;margin-top:8px;color:{{ restC }}">{{ restTxt }}</div>
+</div>
+<sc-if value="{{ selVacia }}" hint-placeholder-val="{{ true }}"><p style="margin:0;padding:14px;border-radius:12px;border:1px dashed rgba(255,255,255,.25);color:#D9C2F0;font-size:14px">Aún no eliges cursos.</p></sc-if>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ selItems }}" as="i" hint-placeholder-count="0"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid rgba(255,255,255,.12)"><div style="min-width:0"><b style="font-size:14.5px">{{ i.nombre }}</b><div style="font-size:13px;color:#D9C2F0">{{ i.meta }}<sc-if value="{{ i.cruce }}" hint-placeholder-val="{{ false }}"><b style="color:#FFB4AB"> · cruce</b></sc-if></div></div><button type="button" onClick="{{ i.quitar }}" aria-label="Quitar {{ i.nombre }}" style="min-height:44px;padding:0 6px;background:none;border:0;color:#fff;font-weight:700;font-size:14px;text-decoration:underline;cursor:pointer">Quitar</button></div></sc-for>
+</div>
+<sc-if value="{{ haySemana }}" hint-placeholder-val="{{ false }}">
+<div style="background:rgba(255,255,255,.06);border-radius:14px;padding:12px">
+<div style="font-size:12.5px;font-weight:700;letter-spacing:.06em;color:#D9C2F0;margin-bottom:8px">TU SEMANA</div>
+<div style="display:grid;grid-template-columns:58px repeat(6,minmax(0,1fr));gap:4px;align-items:center">
+<span></span><sc-for list="{{ diasC }}" as="dc" hint-placeholder-count="6"><span style="font-size:11.5px;font-weight:700;text-align:center;color:#E9E1F3">{{ dc }}</span></sc-for>
+<sc-for list="{{ semana }}" as="fr" hint-placeholder-count="3"><span style="font-size:11.5px;color:#D9C2F0">{{ fr.n }}</span><sc-for list="{{ fr.cells }}" as="x" hint-placeholder-count="6"><span style="height:26px;border-radius:6px;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff;transition:background .3s;background:{{ x.bg }}">{{ x.t }}</span></sc-for></sc-for>
+</div>
+<sc-if value="{{ hayCruces }}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;color:#FFD98A;margin-top:8px;font-weight:700">Hay sesiones en vivo a la misma hora: quedan grabadas</div></sc-if>
+</div>
+</sc-if>
+<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:14px">
+<sc-for list="{{ validSel }}" as="v" hint-placeholder-count="5"><li style="display:flex;gap:10px;align-items:flex-start;color:#E9E1F3"><span style="width:20px;height:20px;flex:none;border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:{{ v.bgD }};color:{{ v.fgD }}">{{ v.m }}</span><span style="font-weight:{{ v.w }}">{{ v.t }}</span></li></sc-for>
+</ul>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;border-top:1px solid rgba(255,255,255,.12);padding-top:14px"><div><div style="font-size:12.5px;color:#D9C2F0">Terminarías sin verano</div><div style="font:400 24px/1.1 'Bebas Neue',sans-serif">{{ prSelSin }}</div></div><div><div style="font-size:12.5px;color:#D9C2F0">Con esta selección</div><div style="font:400 24px/1.1 'Bebas Neue',sans-serif;color:#F2A900">{{ prSelCon }}</div></div></div>
+<span style="font-size:12.5px;color:#D9C2F0;margin-top:-8px">Estimación referencial.</span>
+<div style="display:grid;grid-template-columns:1fr 1.3fr;gap:8px">
+<button type="button" onClick="{{ altGo }}" style="min-height:48px;border-radius:999px;border:2px solid #fff;background:transparent;color:#fff;font-weight:700;font-size:14.5px;cursor:pointer" style-hover="background:rgba(255,255,255,.1)">{{ altTxt }}</button>
+<button type="button" onClick="{{ irSolicitud }}" disabled="{{ selVacia }}" style="min-height:48px;border-radius:999px;border:0;background:#F2A900;color:#1A1A1A;font-weight:700;font-size:14.5px;cursor:pointer;opacity:{{ revOp }}" style-hover="background:#FFC23D">Revisar y enviar</button>
+</div>
+</aside>
+</sc-if>
+</div>
+</div>
+</main>
+
+<sc-if value="{{ barraMovil }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:45;background:#120C1C;color:#fff;padding:10px 14px calc(10px + env(safe-area-inset-bottom));border-radius:18px 18px 0 0;box-shadow:0 -8px 24px rgba(18,12,28,.25);display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap"><b style="font:400 26px/1 'Bebas Neue',sans-serif;color:{{ credC }}">{{ credSel }}</b><span style="font:400 18px/1 'Bebas Neue',sans-serif">/ {{ credMax }} créditos</span></span><sc-if value="{{ hayCruces }}" hint-placeholder-val="{{ false }}"><b style="font-size:13px;color:#FFB4AB">{{ crucesCorto }}</b></sc-if></div>
+<div style="display:grid;grid-template-columns:{{ segCols }};gap:2px"><sc-for list="{{ segs }}" as="g" hint-placeholder-count="11"><span style="height:6px;border-radius:2px;background:{{ g.bg }}"></span></sc-for></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<button type="button" onClick="{{ verSeleccion }}" style="min-height:44px;border-radius:999px;border:2px solid #fff;background:transparent;color:#fff;font-weight:700;font-size:14px;cursor:pointer">Ver mi selección</button>
+<button type="button" onClick="{{ irSolicitud }}" style="min-height:44px;border-radius:999px;border:0;background:#F2A900;color:#1A1A1A;font-weight:700;font-size:14px;cursor:pointer">Revisar solicitud</button>
+</div>
+</div>
+</sc-if>
+</sc-if>
+
+<footer style="background:#6A00BE;color:#F1E7FB;font-size:14px;padding-bottom:{{ pieExtra }}">
+<div style="max-width:1280px;margin:0 auto;padding:22px {{ padX }};display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center">
+<img src="https://ucontinental.edu.pe/site/wp-content/themes/salient-child/img/logo.svg" alt="Universidad Continental" style="height:30px;filter:brightness(0) invert(1)">
+<span>Universidad Continental · Modalidad A Distancia</span>
+<span>Prototipo con datos de ejemplo</span>
+</div>
+</footer>
+
+<sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-modal="true" aria-labelledby="m-t" onClick="{{ fondoModal }}" style="position:fixed;inset:0;background:rgba(18,12,28,.65);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px">
+<div style="background:#fff;border-radius:22px;max-width:540px;width:100%;padding:24px;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 32px);overflow:auto;animation:ucIn .25s ease-out">
+<h2 id="m-t" style="font:700 22px Sora,sans-serif;margin:0">Ingreso de demostración</h2>
+<p style="margin:0;color:#575163;font-size:15px">En la versión real, aquí se abre el inicio de sesión de Google con tu cuenta @continental.edu.pe. Para el prototipo, elige un estudiante de ejemplo:</p>
+<sc-for list="{{ perfiles }}" as="p" hint-placeholder-count="3">
+<button type="button" onClick="{{ p.elegir }}" autoFocus="{{ p.foco }}" style="display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1px solid #E5E2EB;border-radius:16px;padding:14px;background:#fff;cursor:pointer;min-height:64px;transition:border-color .2s,background .2s" style-hover="border-color:#6A00BE;background:#F3ECFB">
+<span style="width:44px;height:44px;flex:none;border-radius:999px;background:#6A00BE;color:#fff;display:flex;align-items:center;justify-content:center;font:700 15px Sora,sans-serif">{{ p.ini }}</span>
+<span style="display:flex;flex-direction:column;min-width:0"><b style="font:700 15.5px Sora,sans-serif;color:#15111C">{{ p.nombre }}</b><span style="font-size:13.5px;color:#575163">{{ p.desc }}</span></span>
+</button>
+</sc-for>
+<div style="display:flex;justify-content:flex-end"><button type="button" onClick="{{ cerrarModal }}" style="min-height:44px;padding:0 12px;background:none;border:0;color:#6A00BE;font-weight:700;font-size:14px;text-decoration:underline;cursor:pointer">Cancelar</button></div>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { ready: false, sesion: false, modal: false, paso: 'avance', filtro: 'disponible', sel: new Map(), mallaSel: null, solicitud: null, editando: false, celular: '', pref: 'whatsapp', acepta: false, msg: '', enviando: false, w: typeof window !== 'undefined' ? window.innerWidth : 1280, hDia: 1, copiado: false, error: '' };
+  asideRef = React.createRef();
+
+  componentDidMount() {
+    this._r = () => this.setState({ w: window.innerWidth });
+    this._k = (e) => { if (e.key === 'Escape' && this.state.modal) this.setState({ modal: false }); };
+    window.addEventListener('resize', this._r); window.addEventListener('keydown', this._k);
+    this.scripts().then(() => UCP.api.sesion()).then((s) => (s.ok ? this.cargar() : this.setState({ ready: true })))
+      .catch(() => this.setState({ ready: true, error: 'No se pudieron cargar los datos de demostración.' }));
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._r); window.removeEventListener('keydown', this._k); }
+
+  scripts() {
+    if (!window.jspdf && !document.getElementById('uc-jspdf')) { const j = document.createElement('script'); j.id = 'uc-jspdf'; j.src = 'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js'; document.head.appendChild(j); }
+    if (window.UCP && UCP.sim && UCP.api && UCP.pdfConstancia && UCP.campana && window.UC_PROTO) return Promise.resolve();
+    const una = (src) => new Promise((ok, ko) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = ko; document.head.appendChild(s); });
+    return ['js/config.js', 'js/datos-prototipo.js', 'js/campana.js', 'js/api.js', 'js/simulador.js', 'js/pdf.js'].reduce((p, s) => p.then(() => una(s)), Promise.resolve());
+  }
+
+  async cargar() {
+    const A = UCP.api;
+    const [perfil, historial, malla, oferta, parametros, calendario, habilitacion, solicitud, camp] = await Promise.all([A.perfil(), A.historial(), A.malla(), A.oferta(), A.parametros(), A.calendario(), A.habilitacion(), A.solicitudPrevia(), A.campana()]);
+    this.D = { perfil, historial, malla, oferta, parametros, calendario, habilitacion };
+    this.Cc = camp;
+    this.M = UCP.sim.preparar({ malla, historial, oferta, parametros });
+    const fase = camp.fase, CA = UCP.campana;
+    // Solo los cursos con todos sus prerrequisitos aprobados; secciones solo cuando Coordinación abre el curso
+    this.OF = UCP.sim.clasificarOferta(this.M).filter((o) => o.disponibilidad.tipo === 'disponible').map((o) => {
+      const ec = CA.estadoCurso(camp, o.codigo), secs = CA.seccionesCurso(camp, o.codigo);
+      return Object.assign({}, o, { estadoCampana: ec, estado: ec === 'abierto' ? 'ofertado' : 'por_confirmar',
+        secciones: fase === 'horarios' && ec === 'abierto' ? secs.map((x) => ({ seccion: x.seccion, vacantes: x.vacantes || 40, inscritos: 0, sesiones: [{ dia: +x.dia, hora_inicio: x.hora_inicio, hora_fin: x.hora_fin, tipo: 'sincrona' }] })) : [] });
+    });
+    this.E = UCP.sim.escenarios(this.M, { carga: CA.carga(camp, malla), cicloActual: perfil.ciclo_relativo });
+    const sel = new Map();
+    if (solicitud) solicitud.cursos.forEach((c) => { const o = this.OF.find((x) => x.codigo === c.codigo); if (o) sel.set(c.codigo, this.itemDe(o, (o.secciones || []).some((x) => x.seccion === c.seccion) ? c.seccion : null)); });
+    const celular = (solicitud && solicitud.contacto && solicitud.contacto.celular) || CA.celularDemo(perfil.id);
+    const pref = (solicitud && solicitud.contacto && solicitud.contacto.preferencia) || 'whatsapp';
+    this.setState({ ready: true, sesion: true, sel, solicitud, celular, pref, paso: 'avance', filtro: 'disponible', mallaSel: null, editando: false, acepta: false, msg: '' });
+  }
+
+  itemDe(o, seccion) {
+    const sec = (o.secciones || []).find((s) => s.seccion === seccion) || null;
+    return { codigo: o.codigo, nombre: o.nombre, creditos: o.creditos, ciclo: o.ciclo, seccion: sec ? sec.seccion : null, sesiones: sec ? sec.sesiones : [], disponibilidad: o.disponibilidad, estado: o.estado, recuperacion: o.recuperacion };
+  }
+  ir(paso) { this.setState({ paso }); window.scrollTo({ top: 0 }); }
+  elegir(o, seccion) { const sel = new Map(this.state.sel); sel.set(o.codigo, this.itemDe(o, seccion || null)); this.setState({ sel }); }
+  quitar(k) { const sel = new Map(this.state.sel); sel.delete(k); this.setState({ sel }); }
+
+  async enviar() {
+    const { sel, acepta, celular, pref } = this.state, D = this.D, M = this.M, fase = this.Cc.fase;
+    const digitos = String(celular || '').replace(/\D/g, '');
+    if ((pref === 'whatsapp' || pref === 'llamada') && digitos.length < 9) { this.setState({ msg: 'Escribe tu celular para que podamos contactarte por ' + (pref === 'whatsapp' ? 'WhatsApp.' : 'llamada.') }); return; }
+    if (!acepta) { this.setState({ msg: 'Marca la autorización para enviar tu solicitud.' }); return; }
+    const v = UCP.sim.validar(M, sel, D.habilitacion, fase); if (!v.puedeEnviar) return;
+    this.setState({ enviando: true, msg: 'Enviando…' });
+    const p = D.perfil;
+    const payload = {
+      estudiante: { id: p.id, nombres: p.nombres, apellidos: p.apellidos, correo: p.correo, carrera: p.carrera.nombre, ciclo: p.ciclo_relativo },
+      contacto: { celular: celular.trim(), preferencia: pref },
+      periodo: D.oferta.periodo, creditos: v.creditos, autorizacion_datos: true, origen: 'portal-verano',
+      cursos: [...sel.values()].map((i) => ({ codigo: i.codigo, nombre: i.nombre, creditos: i.creditos, seccion: i.seccion, sesiones: i.sesiones, estado: i.estado }))
+    };
+    try {
+      const r = await UCP.api.enviarSolicitud(payload);
+      if (!r.ok) throw new Error();
+      this.setState({ solicitud: Object.assign({}, payload, { id: r.id, fecha: r.fecha }), editando: false, enviando: false, msg: '', acepta: false });
+      window.scrollTo({ top: 0 });
+    } catch (e) { this.setState({ enviando: false, msg: 'No se pudo enviar tu solicitud. Inténtalo de nuevo.' }); }
+  }
+
+  async retirar() {
+    if (!window.confirm('¿Seguro que quieres retirar tu solicitud? Podrás volver a enviarla hasta la fecha de cierre.')) return;
+    await UCP.api.retirarSolicitud();
+    this.setState({ solicitud: null, sel: new Map(), editando: false, acepta: false });
+    this.ir('verano');
+  }
+
+  renderVals() {
+    const st = this.state, w = st.w, movil = w < 760, ancho = w >= 1080;
+    const titulo = (s) => String(s || '').toLowerCase().replace(/(^|\s)\S/g, (m) => m.toUpperCase());
+    const padX = movil ? '16px' : '32px';
+    const base = {
+      cargando: !st.ready, verIngreso: st.ready && !st.sesion, sesion: st.ready && st.sesion, movil, escritorio: !movil, padX, error: st.error,
+      heroCols: ancho ? 'minmax(0,5fr) minmax(0,7fr)' : 'minmax(0,1fr)',
+      heroPad: ancho ? '72px 48px 72px max(32px, calc((100vw - 1280px)/2 + 32px))' : (movil ? '40px 18px' : '56px 32px'),
+      pasosIngreso: ['Mi avance', 'Mi malla', 'Cursos de verano', 'Mi horario', 'Mi solicitud'].map((t, i) => ({ n: String(i + 1).padStart(2, '0'), t })),
+      abrirSelector: () => { if (UCP.config.modo !== 'prototipo') { location.href = '/auth/google'; return; } this.setState({ modal: true }); },
+      modal: st.modal, cerrarModal: () => this.setState({ modal: false }),
+      fondoModal: (e) => { if (e.target === e.currentTarget) this.setState({ modal: false }); },
+      perfiles: st.modal && window.UC_PROTO ? UC_PROTO.perfiles.map((p, i) => ({ foco: i === 0, nombre: titulo(p.perfil.nombres + ' ' + p.perfil.apellidos), desc: `${p.titulo} · ${p.perfil.carrera.nombre}`, ini: p.perfil.nombres[0] + p.perfil.apellidos[0], elegir: () => { UCP.api.ingresarDemo(p.clave); this.setState({ modal: false, ready: false }); this.cargar(); } })) : [],
+      pieExtra: '0px'
+    };
+    if (!base.sesion) return base;
+
+    const D = this.D, M = this.M, OF = this.OF, sim = UCP.sim;
+    const soles = (n) => 'S/ ' + Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const DIAS = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+    const DIAS_C = ['', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    const DL = ['', 'L', 'M', 'X', 'J', 'V', 'S'];
+    const fechaTxt = (iso) => { if (!iso) return 'Por anunciar'; const [y, m, d] = iso.slice(0, 10).split('-'); return `${d}/${m}/${y}`; };
+    const listaDias = (ds) => { const n = ds.slice().sort().map((d) => DIAS[d].toLowerCase()); return n.length > 1 ? n.slice(0, -1).join(', ') + ' y ' + n.at(-1) : n[0]; };
+    const lista = (a) => (a.length > 1 ? a.slice(0, -1).join(', ') + ' y ' + a.at(-1) : a[0] || '');
+    const horarioTxt = (ses) => (ses || []).map((s) => `${DIAS_C[s.dia]} ${s.hora_inicio}–${s.hora_fin}`).join(' · ');
+    const lineas = (ses) => { const g = new Map(); (ses || []).forEach((s) => { const k = s.hora_inicio + '–' + s.hora_fin; if (!g.has(k)) g.set(k, []); g.get(k).push(DIAS_C[s.dia]); }); return [...g].map(([k, ds]) => lista(ds) + ' · ' + k); };
+    const ESTADO_OFERTA = { ofertado: 'Oferta confirmada', por_confirmar: 'Apertura por confirmar', cerrado: 'Cerrado' };
+    const PILL = { disponible: ['Disponible', '#E3F2EA', '#145C34'], condicional: ['Con condición', '#F3ECFB', '#4B0087'], bloqueado: ['Bloqueado', '#FDE9E7', '#7A2419'] };
+    const p = D.perfil, max = D.parametros.creditos_max_verano, pct = Math.round((M.credAprob / D.malla.creditos_totales) * 100);
+    const PASOS = [['avance', 'Mi avance'], ['malla', 'Mi malla'], ['verano', 'Cursos de verano'], ['horario', 'Mi horario'], ['solicitud', 'Mi solicitud']];
+    const ia = PASOS.findIndex((x) => x[0] === st.paso), paso = st.paso;
+    const C = this.Cc, fase = C.fase, items = [...st.sel.values()], v = sim.validar(M, st.sel, D.habilitacion, fase), pares = v.pares;
+    const enCruce = new Set(), cruceSet = new Set(pares.flatMap((x) => [x.a, x.b]));
+    const fCierre = fechaTxt(C.cierre), fHor = fechaTxt(C.horarios), editable = fase !== 'evaluacion';
+    const conSel = paso === 'verano' || paso === 'horario';
+    const mark = (x) => (!x.ok ? { m: '!', bg: '#B3261E', fg: '#fff', bgD: '#B3261E', fgD: '#fff', w: 700, tc: '#7A2419' } : x.aviso ? { m: 'i', bg: '#FFF3D6', fg: '#6B4200', bgD: '#F2A900', fgD: '#1A1A1A', w: 500, tc: '#15111C' } : { m: '✓', bg: '#E3F2EA', fg: '#145C34', bgD: '#2E7D4F', fgD: '#fff', w: 400, tc: '#15111C' });
+    const out = Object.assign(base, {
+      nombreCompleto: titulo(p.nombres + ' ' + p.apellidos), nombreCorto: titulo(p.nombres.split(' ')[0]), iniciales: (p.nombres[0] || '') + (p.apellidos[0] || ''),
+      metaPerfil: `${p.carrera.nombre} · ${p.plan.nombre} · ${p.ciclo_relativo}.° ciclo · Periodo ${p.periodo_actual}`, periodo: p.periodo_actual,
+      salir: () => { UCP.api.salir(); this.setState({ sesion: false, sel: new Map(), solicitud: null, paso: 'avance' }); },
+      pct, pctW: pct + '%', kpiCols: movil ? 'repeat(2,minmax(0,1fr))' : 'repeat(4,auto)',
+      kpis: [{ l: 'Avance de tu carrera', v: pct + '%', c: '#F2A900' }, { l: 'Créditos aprobados', v: `${M.credAprob} de ${D.malla.creditos_totales}`, c: '#fff' }, { l: 'Te faltan', v: `${M.credFaltan} créditos`, c: '#fff' }, { l: 'Llevas este periodo', v: `${M.enCurso.size} cursos`, c: '#fff' }],
+      stripPad: movil ? '20px 16px' : '24px 32px',
+      pasos: PASOS.map(([id, t], i) => { const cur = i === ia, prev = i < ia; return { n: i + 1, t, go: () => this.ir(id), cur: cur ? 'step' : undefined, linea: i < 4, cBg: cur ? '#6A00BE' : prev ? '#F3ECFB' : '#fff', cFg: cur ? '#fff' : prev ? '#4B0087' : '#575163', cBd: cur || prev ? '#6A00BE' : '#CFC6DA', halo: cur ? '0 0 0 5px #E9DDF7' : 'none', lFg: cur ? '#4B0087' : '#15111C', lW: cur ? 700 : 500, lineaBg: prev ? '#6A00BE' : '#E5E2EB', segBg: cur ? '#6A00BE' : prev ? '#B98AE6' : '#E5E2EB' }; }),
+      pasoN: ia + 1, pasoT: PASOS[ia][1], sigTxt: ia < 4 ? 'Sigue: ' + PASOS[ia + 1][1] : 'Último paso',
+      hayAnt: ia > 0, antT: ia > 0 ? PASOS[ia - 1][1] : '', antGo: () => ia > 0 && this.ir(PASOS[ia - 1][0]), sinAnt: ia === 0, antOp: ia === 0 ? 0.4 : 1,
+      haySig: ia < 4, sigT: ia < 4 ? PASOS[ia + 1][1] : '', sigGo: () => ia < 4 && this.ir(PASOS[ia + 1][0]), sinSig: ia === 4, sigOp: ia === 4 ? 0.4 : 1,
+      noHabil: !D.habilitacion.habilitado, habMsg: D.habilitacion.mensaje || '',
+      mainPad: movil ? '20px 16px 40px' : '32px 32px 56px',
+      gridCols: conSel && ancho ? 'minmax(0,1fr) 380px' : 'minmax(0,1fr)', conSel, asideRef: this.asideRef, asidePos: ancho ? 'sticky' : 'static',
+      esAvance: paso === 'avance', esMalla: paso === 'malla', esVerano: paso === 'verano', esHorario: paso === 'horario',
+      irVerano: () => this.ir('verano'), irMalla: () => this.ir('malla'), irSolicitud: () => this.ir('solicitud'),
+      altTxt: paso === 'verano' ? 'Ver horario' : 'Ver cursos', altGo: () => this.ir(paso === 'verano' ? 'horario' : 'verano'),
+      barraMovil: !ancho && conSel && items.length > 0, pieExtra: !ancho && conSel && items.length > 0 ? '150px' : '0px',
+      verSeleccion: () => { const el = this.asideRef.current; if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 150, behavior: 'smooth' }); }
+    });
+
+    // 1 · Avance
+    if (paso === 'avance') {
+      const cont = { aprobado: M.aprob.size, en_curso: M.enCurso.size, desaprobado: M.desap.size };
+      const pendientes = D.malla.cursos.filter((c) => sim.estadoCurso(M, c.codigo) === 'pendiente').length + cont.desaprobado;
+      const disp = OF.filter((o) => o.disponibilidad.tipo === 'disponible'), cond = OF.filter((o) => o.disponibilidad.tipo === 'condicional');
+      const recup = OF.filter((o) => o.recuperacion && o.disponibilidad.tipo !== 'bloqueado');
+      const claves = D.malla.cursos.filter((c) => c.curso_clave && sim.estadoCurso(M, c.codigo) !== 'aprobado');
+      const recs = [];
+      recup.forEach((o) => recs.push({ pre: 'Recupera ', b: o.nombre, post: ' este verano: así no se retrasan los cursos que dependen de él.', bg: '#FDE9E7', fg: '#7A2419' }));
+      claves.forEach((c) => recs.push({ pre: '', b: c.nombre, post: ` es un curso clave: habilita ${sim.dependientes(M, c.codigo)} asignaturas. No lo postergues.`, bg: '#F2A900', fg: '#1A1A1A' }));
+      if (disp.length) recs.push({ pre: 'Puedes llevar ', b: `${disp.length} ${disp.length === 1 ? 'curso' : 'cursos'}`, post: ` en el verano 2027${cond.length ? `, y ${cond.length} más si apruebas lo que llevas ahora` : ''}.`, bg: '#E3F2EA', fg: '#145C34' });
+      const pr = sim.proyeccion(M, max);
+      const idx = (s) => { const m = /^(\d{4})-(I{1,2})$/.exec(s); if (m) return (m[1] - 2027) * 2 + (m[2] === 'I' ? 1 : 2); return /verano/i.test(s) ? 0 : -1; };
+      const iS = idx(pr.sinVerano), iC = idx(pr.conVerano), N = Math.max(iS, iC, 1) + 1;
+      const lab = (k) => (k === 0 ? 'Verano 27' : `${2027 + Math.floor((k - 1) / 2)}-${k % 2 ? 'I' : 'II'}`);
+      const fila = (t, fin, i, conV) => ({ t, fin, c: conV ? '#F2A900' : '#fff', cells: Array.from({ length: N }, (_, k) => { const lleno = k === 0 ? conV && i >= 0 : k <= i; const ult = k === i; return { t: ult ? 'Fin' : '', bg: lleno ? (k === 0 ? '#F2A900' : conV ? '#6A00BE' : '#4B3A63') : 'transparent', fg: k === 0 ? '#1A1A1A' : '#fff', bd: lleno ? 'transparent' : 'rgba(255,255,255,.18)' }; }) });
+      Object.assign(out, {
+        historial: [{ v: cont.aprobado, l: 'cursos aprobados', bg: '#F3ECFB', c: '#6A00BE' }, { v: cont.en_curso, l: `cursos en curso (${M.credEnCurso} créditos)`, bg: '#FFF6DE', c: '#8A5A00' }, { v: pendientes, l: 'cursos por llevar', bg: '#F8F7FA', c: '#3E3850' }].concat(cont.desaprobado ? [{ v: cont.desaprobado, l: 'por recuperar', bg: '#FDE9E7', c: '#B3261E' }] : []),
+        recs: recs.slice(0, 4).map((r, i) => Object.assign({ n: i + 1 }, r)), hayRecs: recs.length > 0, sinRecs: !recs.length,
+        lineaCols: `repeat(${N},minmax(0,1fr))`, lineaLab: Array.from({ length: N }, (_, k) => lab(k)),
+        lineaT: [fila('Sin verano', pr.sinVerano, iS, false), fila(`Con ${max} créditos en verano`, pr.conVerano, iC, true)],
+        avCols: 'minmax(0,1fr)',
+        escenarios: this.E.map((e) => ({ etiqueta: e.etiqueta, termina: e.termina, nota: e.nota, c: e.acorta ? '#F2A900' : '#fff', bg: e.acorta ? 'rgba(242,169,0,.12)' : 'rgba(255,255,255,.06)', bd: e.acorta ? 'rgba(242,169,0,.55)' : 'rgba(255,255,255,.12)' })),
+        escCols: movil ? 'minmax(0,1fr)' : `repeat(${this.E.length},minmax(0,1fr))`,
+        escNota: `Supone que apruebas lo que llevas ahora, hasta ${UCP.campana.carga(C, D.malla)} créditos por ciclo y ${max} por verano, en veranos consecutivos, y depende de la oferta de cada verano. No es la fecha de titulación.`,
+        escCta: fase === 'solicitudes' ? 'Solicitar mis cursos del verano 2027' : fase === 'horarios' ? 'Elegir mis horarios de verano' : 'Ver mis cursos de verano'
+      });
+    }
+
+    // 2 · Malla
+    if (paso === 'malla') {
+      const etiqueta = { aprobado: 'Aprobado', en_curso: 'En curso', desaprobado: 'Por recuperar', pendiente: 'Pendiente' };
+      const EST = { aprobado: ['#6A00BE', '#fff', '#6A00BE'], en_curso: ['#F2A900', '#1A1A1A', '#F2A900'], desaprobado: ['#FDE9E7', '#7A2419', '#F3B8AF'], pendiente: ['#F1EDF5', '#2E2840', '#F1EDF5'] };
+      const sk = st.mallaSel, sc = sk ? M.cursos[sk] : null;
+      const reqs = new Set(sc ? (sc.prerrequisitos || []).flat() : []);
+      const hijos = new Set(sk ? D.malla.cursos.filter((c) => (c.prerrequisitos || []).flat().includes(sk)).map((c) => c.codigo) : []);
+      const porCiclo = {}; D.malla.cursos.forEach((c) => { (porCiclo[c.ciclo] ||= []).push(c); });
+      out.ciclos = Object.keys(porCiclo).sort((a, b) => a - b).map((ci) => ({ n: ci, cursos: porCiclo[ci].map((c) => { const e = sim.estadoCurso(M, c.codigo), [bg, fg, bd] = EST[e]; const es = c.codigo === sk, rq = reqs.has(c.codigo), hj = hijos.has(c.codigo); return { nombre: c.nombre, meta: `${c.creditos} cr. · ${etiqueta[e]}`, bg, fg, bd, pressed: es, ol: es ? '3px solid #120C1C' : rq ? '3px solid #F2A900' : hj ? '3px dashed #6A00BE' : '0 solid transparent', op: sk && !es && !rq && !hj ? 0.45 : 1, go: () => this.setState({ mallaSel: es ? null : c.codigo }) }; }) }));
+      out.leyenda = ['aprobado', 'en_curso', 'desaprobado', 'pendiente'].map((k) => ({ t: etiqueta[k], bg: EST[k][0], bd: EST[k][2] }));
+      out.mallaIntro = `${D.malla.nombre} · ${D.malla.ciclos} ciclos · ${D.malla.creditos_totales} créditos.`;
+      out.mallaCols = ancho ? 'minmax(0,1fr) 320px' : 'minmax(0,1fr)'; out.mallaColW = movil ? '150px' : '164px';
+      out.haySelMalla = !!sc; out.sinSelMalla = !sc; out.limpiarMalla = () => this.setState({ mallaSel: null });
+      if (sc) {
+        const e = sim.estadoCurso(M, sc.codigo), o = OF.find((x) => x.codigo === sc.codigo), req = [...reqs].map((k) => (M.cursos[k] ? M.cursos[k].nombre : k));
+        out.md = { nombre: sc.nombre, meta: `${sc.codigo} · ${sc.creditos} créditos · Ciclo ${sc.ciclo}`, estado: etiqueta[e], eBg: EST[e][0], eFg: EST[e][1], clave: !!sc.curso_clave, req: req.length ? req.join(', ') : 'ninguno', habilita: sim.dependientes(M, sc.codigo), verano: o ? ESTADO_OFERTA[o.estado] : sc.se_dicta_en_verano ? 'No está en la oferta de este verano' : 'No se dicta en verano' };
+      } else out.md = {};
+    }
+
+    // 3 · Verano
+    if (paso === 'verano') {
+      const FASE = { solicitudes: ['Solicitudes abiertas hasta el ' + fCierre, `Marca "Solicitar apertura" en los cursos que te interesan. Los horarios se publicarán el ${fHor}.`, '#F3ECFB', '#4B0087'],
+        evaluacion: ['Solicitudes cerradas', `Coordinación académica está evaluando qué cursos abrir. Los horarios se publicarán el ${fHor}.`, '#FFF3D6', '#6B4200'],
+        horarios: ['Horarios publicados', 'Elige la sección de los cursos que se abrieron. Luego te matriculas en la intranet.', '#E3F2EA', '#145C34'] }[fase];
+      Object.assign(out, { faseT: FASE[0], faseD: FASE[1], faseBg: FASE[2], faseFg: FASE[3],
+        veranoIntro: 'Solo ves los cursos de verano cuyos prerrequisitos ya aprobaste.',
+        vacioTxt: 'Por ahora no hay cursos de verano que puedas solicitar con tus prerrequisitos aprobados.' });
+      const lst = this.OF.slice().sort((a, b) => (st.sel.has(b.codigo) ? 1 : 0) - (st.sel.has(a.codigo) ? 1 : 0)); out.listaVacia = !lst.length;
+      const cruceCon = (k) => pares.filter((x) => x.a === k || x.b === k).map((x) => `${M.cursos[x.a === k ? x.b : x.a].nombre} (${listaDias(x.dias)})`).join('; ');
+      out.cursos = lst.map((o) => {
+        const el = st.sel.get(o.codigo), ec = o.estadoCampana, noAbierto = fase === 'horarios' && ec === 'no_abierto';
+        const pills = [];
+        if (fase === 'horarios') pills.push(ec === 'abierto' ? { t: 'Abierto', bg: '#E3F2EA', fg: '#145C34', bd: '#E3F2EA' } : ec === 'no_abierto' ? { t: 'No abierto', bg: '#FDE9E7', fg: '#7A2419', bd: '#FDE9E7' } : { t: 'En evaluación', bg: '#F1EDF5', fg: '#3E3850', bd: '#F1EDF5' });
+        if (el) pills.push({ t: 'En tu solicitud', bg: '#6A00BE', fg: '#fff', bd: '#6A00BE' });
+        if (o.curso_clave) pills.push({ t: 'Curso clave', bg: '#F2A900', fg: '#1A1A1A', bd: '#F2A900' });
+        if (o.recuperacion) pills.push({ t: 'Recuperación', bg: '#fff', fg: '#7A2419', bd: '#E4A59B' });
+        const sinSecT = fase === 'solicitudes' ? 'Horario por publicar' : fase === 'evaluacion' ? (el ? 'Solicitado' : 'Solicitudes cerradas') : ec === 'no_abierto' ? 'No se abrió' : 'Apertura en evaluación';
+        const sinSecD = fase === 'solicitudes' ? `Se abrirá si alcanza el mínimo de estudiantes. Horarios desde el ${fHor}.` : fase === 'evaluacion' ? 'Coordinación está evaluando qué cursos abrir.' : ec === 'no_abierto' ? 'No alcanzó el mínimo de estudiantes.' : 'Aún no se define su apertura.';
+        return {
+          nombre: o.nombre, codigo: o.codigo, ciclo: o.ciclo, cr: o.creditos, crC: noAbierto ? '#8C8499' : '#6A00BE', pills,
+          ofertaTxt: fase === 'solicitudes' ? 'Solicitud de apertura' : (ESTADO_OFERTA[o.estado] || 'Por confirmar'), dot: o.estado === 'ofertado' ? '#6A00BE' : '#fff',
+          fondo: noAbierto ? '#FCFBFD' : '#fff', borde: el ? '2px solid #6A00BE' : '1px solid #E5E2EB', sombra: el ? '0 8px 24px rgba(106,0,190,.10)' : 'none',
+          cond: false, condTxt: '', bloq: noAbierto && !!el, bloqTxt: 'Este curso no se abrió porque no alcanzó el mínimo de estudiantes. La mesa de ayuda puede orientarte sobre alternativas.',
+          sinSec: !(o.secciones || []).length, sinSecT, sinSecD, sinSecBg: el ? '#F3ECFB' : '#F8F7FA',
+          sinSecElegir: fase === 'solicitudes' && !el, sinSecQuitar: (fase === 'solicitudes' || (fase === 'horarios' && noAbierto)) && !!el,
+          apertura: () => this.elegir(o, ''), quitar: () => this.quitar(o.codigo),
+          secciones: (o.secciones || []).map((s) => {
+            const act = !!(el && el.seccion === s.seccion), on = new Set(s.sesiones.map((x) => x.dia)), fill = '#6A00BE';
+            return { sec: s.seccion, lines: lineas(s.sesiones), libres: s.vacantes - s.inscritos, tot: s.vacantes, act, prim: !act, btn: el && el.seccion ? 'Cambiar a esta' : 'Elegir', aria: `${el && el.seccion ? 'Cambiar a la sección' : 'Elegir la sección'} ${s.seccion} de ${o.nombre}`,
+              cruce: act && cruceSet.has(o.codigo), cruceTxt: act ? cruceCon(o.codigo) : '', qBd: '#6A00BE', qFg: '#4B0087',
+              rowBg: act ? '#F3ECFB' : 'transparent', rowSh: act ? `inset 4px 0 0 ${fill}` : 'none',
+              elegir: () => this.elegir(o, s.seccion), quitar: () => this.quitar(o.codigo),
+              dias: [1, 2, 3, 4, 5, 6].map((d) => ({ l: DL[d], bg: on.has(d) ? fill : '#F1EDF5', fg: on.has(d) ? '#fff' : '#5E5770' })) };
+          })
+        };
+      });
+    }
+
+    // Panel Mi selección
+    if (conSel) {
+      const fr = (h) => (h < 12 ? 0 : h < 18 ? 1 : 2), excede = v.creditos > max, pr2 = sim.proyeccion(M, v.creditos);
+      const nSeg = Math.max(max, v.creditos);
+      Object.assign(out, {
+        selCuenta: `${items.length} ${items.length === 1 ? 'curso' : 'cursos'}`, selVacia: !items.length, revOp: items.length ? 1 : 0.5,
+        credSel: v.creditos, credMax: max, credC: excede ? '#FF8A80' : '#F2A900', segCols: `repeat(${nSeg},minmax(0,1fr))`,
+        segs: Array.from({ length: nSeg }, (_, i) => ({ bg: i < v.creditos ? (excede ? '#E5534B' : '#F2A900') : 'rgba(255,255,255,.15)' })),
+        restTxt: excede ? `Te pasas por ${v.creditos - max} ${v.creditos - max === 1 ? 'crédito' : 'créditos'}` : `Te quedan ${max - v.creditos} créditos disponibles`, restC: excede ? '#FFB4AB' : '#D9C2F0',
+        selItems: items.map((i) => ({ nombre: i.nombre, meta: `${i.creditos} cr. · ${i.seccion ? 'Sección ' + i.seccion : 'Solicitud de apertura'}`, cruce: enCruce.has(i.codigo), quitar: () => this.quitar(i.codigo) })),
+        haySemana: items.some((i) => i.sesiones && i.sesiones.length), diasC: DIAS_C.slice(1, 7),
+        semana: ['Mañana', 'Tarde', 'Noche'].map((n, fi) => ({ n, cells: [1, 2, 3, 4, 5, 6].map((d) => { const k = items.filter((i) => (i.sesiones || []).some((x) => x.dia === d && fr(+x.hora_inicio.slice(0, 2)) === fi)).length; return { t: k > 1 ? k : '', bg: k > 1 ? '#B3261E' : k ? '#6A00BE' : 'rgba(255,255,255,.08)' }; }) })),
+        validSel: v.validaciones.slice(1).map((x) => Object.assign({ t: x.texto }, mark(x))),
+        prSelSin: pr2.sinVerano, prSelCon: pr2.conVerano, hayCruces: pares.length > 0,
+        crucesCorto: `${pares.length} ${pares.length === 1 ? 'cruce' : 'cruces'} de horario`
+      });
+    }
+
+    // 4 · Horario
+    if (paso === 'horario') {
+      const PAL = ['#6A00BE', '#120C1C', '#4B0087', '#7C3FC4', '#3D2A5C', '#5B1FA0'];
+      const color = {}; items.forEach((i, k) => { color[i.codigo] = PAL[k % PAL.length]; });
+      const H0 = 7, H1 = 23, alto = 36, min = (h) => { const [a, b] = h.split(':').map(Number); return a * 60 + b; };
+      const hDias = [1, 2, 3, 4, 5, 6].map((d) => {
+        const ses = items.flatMap((i) => (i.sesiones || []).filter((s) => s.dia === d).map((s) => ({ i, s, a: min(s.hora_inicio), b: min(s.hora_fin) }))).sort((x, y) => x.a - y.a);
+        ses.forEach((x, k) => { const usados = ses.slice(0, k).filter((y) => y.a < x.b && x.a < y.b).map((y) => y.carril); x.carril = 0; while (usados.includes(x.carril)) x.carril++; });
+        ses.forEach((x) => { x.total = 1 + Math.max(...ses.filter((y) => y.a < x.b && x.a < y.b).map((y) => y.carril)); });
+        const on = st.hDia === d, hayCr = ses.some((x) => enCruce.has(x.i.codigo));
+        return { d, nombre: DIAS[d], corto: DIAS_C[d], cuenta: ses.length ? `${ses.length} ${ses.length === 1 ? 'clase' : 'clases'}` : '—', fondo: hayCr ? '#FFF7F6' : '#fff', on, go: () => this.setState({ hDia: d }),
+          tBg: on ? '#6A00BE' : '#fff', tFg: on ? '#fff' : '#3E3850', tBd: on ? '#6A00BE' : '#E5E2EB', dot: hayCr ? '#E5534B' : ses.length ? (on ? '#F2A900' : '#6A00BE') : 'transparent',
+          blocks: ses.map((x) => { const c = enCruce.has(x.i.codigo); return { top: ((x.a - H0 * 60) / 60) * alto + 1 + 'px', height: ((x.b - x.a) / 60) * alto - 3 + 'px', left: `calc(${(100 / x.total) * x.carril}% + 3px)`, width: `calc(${100 / x.total}% - 6px)`, bg: c ? '#B3261E' : color[x.i.codigo], nombre: x.i.nombre, hora: `${x.s.hora_inicio}–${x.s.hora_fin}`, sec: x.i.seccion, cruce: c }; }),
+          agenda: ses.map((x) => { const c = enCruce.has(x.i.codigo); return { nombre: x.i.nombre, sec: x.i.seccion, hora: `${x.s.hora_inicio}–${x.s.hora_fin}`, cruce: c, bg: c ? '#B3261E' : color[x.i.codigo], hc: c ? '#B3261E' : '#6A00BE' }; }) };
+      });
+      const dsel = hDias.find((x) => x.d === st.hDia) || hDias[0], sinH = items.filter((i) => !i.seccion);
+      Object.assign(out, {
+        hDias, agenda: dsel.agenda, diaVacio: !dsel.agenda.length,
+        horas: Array.from({ length: H1 - H0 }, (_, k) => String(H0 + k).padStart(2, '0') + ':00'),
+        leyendaH: items.filter((i) => i.seccion).map((i) => ({ t: `${i.nombre} · ${i.seccion}`, bg: enCruce.has(i.codigo) ? '#B3261E' : color[i.codigo] })),
+        hEspera: fase !== 'horarios', hEsperaT: `Los horarios se publicarán el ${fHor}`, hEsperaD: 'Cuando Coordinación abra tus cursos, aquí podrás elegir tu sección y ver tu semana.',
+        hIntro: 'Así quedaría tu semana con las secciones que elegiste. Si dos sesiones en vivo coinciden, ambas quedan grabadas.',
+        hayCruces: fase === 'horarios' && pares.length > 0,
+        hayItems: fase === 'horarios' && items.some((i) => i.seccion), sinItems: fase === 'horarios' && !items.some((i) => i.seccion), sinCruces: fase === 'horarios' && items.some((i) => i.seccion) && !pares.length,
+        crucesTxt: pares.map((x) => `${M.cursos[x.a].nombre} y ${M.cursos[x.b].nombre} (${listaDias(x.dias)})`).join('; '),
+        haySinH: sinH.length > 0, sinHTxt: sinH.map((i) => i.nombre).join(', ')
+      });
+    }
+
+    // 5 · Solicitud
+    if (paso === 'solicitud') {
+      const confirm = !!(st.solicitud && (!st.editando || !editable));
+      out.esConfirmacion = confirm; out.esSolVacia = !confirm && (!items.length || !editable); out.esSolRevision = !confirm && editable && items.length > 0;
+      out.solVaciaTxt = editable ? 'Todavía no elegiste cursos.' : `Las solicitudes cerraron el ${fCierre}.`;
+      out.solCols = ancho ? 'minmax(0,1fr) 380px' : 'minmax(0,1fr)';
+      const E0 = this.E[0] || {}, E1 = this.E[1] || E0;
+      if (out.esSolRevision) {
+        const costo = D.parametros.costo_credito_verano_ejemplo, puede = v.puedeEnviar && !st.enviando;
+        const PREF = UCP.campana.PREFERENCIAS;
+        Object.assign(out, {
+          solCuenta: `${items.length} ${items.length === 1 ? 'curso' : 'cursos'}`, credSel: v.creditos,
+          solItems: items.map((i) => ({ nombre: i.nombre, cr: i.creditos, sub: `${i.codigo}${i.recuperacion ? ' · recuperación' : ''}`, secTxt: i.seccion ? 'Sección ' + i.seccion : 'Solicitud de apertura', horario: i.seccion ? horarioTxt(i.sesiones) : `Horario desde el ${fHor}`, oferta: fase === 'horarios' ? 'Curso abierto' : 'Apertura por confirmar' })),
+          validAll: v.validaciones.map((x) => Object.assign({ t: x.texto }, mark(x))),
+          costoTotal: soles(v.creditos * costo), costoUnit: soles(costo), prSin: E0.termina, prCon: E1.termina,
+          celular: st.celular, setCelular: (e) => this.setState({ celular: e.target.value, msg: '' }),
+          prefs: Object.keys(PREF).map((k) => { const on = st.pref === k; return { t: PREF[k], on, go: () => this.setState({ pref: k, msg: '' }), bg: on ? '#F2A900' : 'transparent', fg: on ? '#1A1A1A' : '#fff', bd: on ? '#F2A900' : 'rgba(255,255,255,.35)' }; }),
+          editableTxt: `Podrás modificarla o retirarla hasta el ${fCierre}.`,
+          acepta: st.acepta, toggleAcepta: (e) => this.setState({ acepta: e.target.checked, msg: '' }),
+          msgSol: st.msg || (v.puedeEnviar ? '' : 'Corrige lo marcado con ! para poder enviar.'),
+          noEnviar: !puede, enviarOp: puede ? 1 : 0.5, enviarTxt: st.enviando ? 'Enviando…' : st.solicitud ? 'Actualizar mi solicitud' : 'Enviar mi solicitud',
+          enviar: () => this.enviar()
+        });
+      }
+      if (confirm) {
+        const s = st.solicitud, CA = UCP.campana;
+        const estadoTxt = (k) => ({ abierto: 'Abierto', no_abierto: 'No se abrió', por_decidir: fase === 'solicitudes' ? 'Apertura solicitada' : 'En evaluación' })[CA.estadoCurso(C, k)];
+        const avisos = [];
+        s.cursos.forEach((c) => {
+          const ec = CA.estadoCurso(C, c.codigo);
+          if (ec === 'abierto') avisos.push({ t: `${c.nombre} se abrió.`, d: fase === 'horarios' ? 'Te enviamos un correo. Elige tu sección.' : `Te enviamos un correo. Los horarios se publicarán el ${fHor}.`, bg: '#E3F2EA', fg: '#145C34' });
+          if (ec === 'no_abierto') avisos.push({ t: `${c.nombre} no se abrió.`, d: 'No alcanzó el mínimo de estudiantes. Te enviamos un correo y la mesa de ayuda puede orientarte.', bg: '#FDE9E7', fg: '#7A2419' });
+        });
+        const pasosS = fase === 'horarios'
+          ? [{ t: 'Solicitud registrada', fecha: fechaTxt(s.fecha), d: `Número ${s.id}.`, hecho: true },
+             { t: 'Elige tu sección', fecha: '', d: 'En los cursos que se abrieron, desde "Cursos de verano".' },
+             { t: 'Revisa tus pagos', fecha: '', d: 'Con Acompañamiento al estudiante si tienes algún pendiente.' },
+             { t: 'Matricúlate en la intranet', fecha: `${fechaTxt(C.matInicio)} al ${fechaTxt(C.matFin)}`, d: 'Con estos cursos y secciones.', clave: true }]
+          : [{ t: 'Solicitud registrada', fecha: fechaTxt(s.fecha), d: `Número ${s.id}. Puedes modificarla hasta el ${fCierre}.`, hecho: true },
+             { t: 'Orientación', fecha: '', d: 'La mesa de ayuda podrá contactarte por el medio que elegiste.' },
+             { t: 'Publicación de horarios', fecha: fHor, d: 'Te avisaremos por correo qué cursos se abren y podrás elegir tu sección aquí.' },
+             { t: 'Matricúlate en la intranet', fecha: `${fechaTxt(C.matInicio)} al ${fechaTxt(C.matFin)}`, d: 'En las fechas oficiales.', clave: true }];
+        const conSes = s.cursos.some((c) => (c.sesiones || []).length);
+        Object.assign(out, {
+          solId: s.id, confResumen: `${s.cursos.length} ${s.cursos.length === 1 ? 'curso' : 'cursos'} · ${s.creditos} créditos · registrada el ${fechaTxt(s.fecha)}`,
+          confPad: movil ? '22px' : '32px', confCols: ancho ? 'minmax(0,1fr) 400px' : 'minmax(0,1fr)',
+          copiarTxt: st.copiado ? '✓ Copiado' : 'Copiar número',
+          copiar: () => { try { navigator.clipboard.writeText(s.id); } catch (e) {} this.setState({ copiado: true }); setTimeout(() => this.setState({ copiado: false }), 2000); },
+          avisos, hayAvisos: avisos.length > 0,
+          sigue: pasosS.map((x, i) => ({ n: x.hecho ? '✓' : i, t: x.t, d: x.d, fecha: x.fecha, linea: i < pasosS.length - 1, nBg: x.hecho ? '#145C34' : x.clave ? '#F2A900' : '#fff', nFg: x.hecho ? '#fff' : x.clave ? '#1A1A1A' : '#4B0087', nBd: x.hecho ? '#145C34' : x.clave ? '#F2A900' : '#6A00BE', lBg: x.hecho ? '#145C34' : '#E5E2EB', fBg: x.clave ? '#F2A900' : '#F3ECFB', fFg: x.clave ? '#1A1A1A' : '#4B0087' })),
+          confCursos: s.cursos.map((c) => ({ nombre: c.nombre, cr: c.creditos, meta: `${estadoTxt(c.codigo)}${c.seccion ? ' · Sección ' + c.seccion : ''}` })),
+          intranet: UCP.config.intranet,
+          pdfTxt: conSes ? 'Descargar constancia y horario (PDF)' : 'Descargar constancia (PDF)',
+          pdf: () => UCP.pdfConstancia({ perfil: D.perfil, solicitud: s, calendario: D.calendario, parametros: D.parametros, escenarios: this.E, campana: C }),
+          puedeEditar: editable, editarTxt: fase === 'horarios' ? 'Elegir o cambiar mis secciones' : 'Modificar mi solicitud', puedeRetirar: fase === 'solicitudes',
+          retirar: () => this.retirar(),
+          editar: () => { this.setState({ editando: true }); this.ir('verano'); }
+        });
+      }
+    }
+    return out;
+  }
+}
+</script>
+</body>
+</html>

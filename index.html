@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Cursos de verano · Universidad Continental · Modalidad A Distancia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=DM+Sans:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+body{margin:0;font-family:'DM Sans',system-ui,sans-serif;font-size:16px;line-height:1.55;color:#15111C;background:#fff;overflow-x:hidden}
+a{color:#6A00BE}a:hover{color:#4B0087}
+:focus-visible{outline:3px solid #F2A900;outline-offset:2px;box-shadow:0 0 0 2px #120C1C;border-radius:6px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+<a href="#contenido" style="position:absolute;left:-9999px;top:8px;z-index:100;background:#fff;padding:12px 16px;border-radius:8px;font-weight:700" style-focus="left:12px">Saltar al contenido</a>
+<div role="note" style="background:#F3ECFB;color:#4B0087;font-size:14px;padding:9px 16px;display:flex;justify-content:center;flex-wrap:wrap;gap:4px 10px;align-items:center;text-align:center"><b style="background:#4B0087;color:#fff;padding:2px 8px;border-radius:999px;font-size:12px;letter-spacing:.04em">DEMO</b><span><b>Prototipo con datos de demostración.</b> Prototipo para revisión interna. La información y los estudiantes de ejemplo son ficticios.</span></div>
+<div style="background:#120C1C;color:#E9E1F3;font-size:12.5px;letter-spacing:.05em;font-weight:700">
+<div style="max-width:1240px;margin:0 auto;padding:0 {{ padX }};min-height:36px;display:flex;justify-content:flex-end;align-items:center;gap:22px;flex-wrap:wrap">
+<a href="https://estudiantes.ucontinental.edu.pe/" target="_blank" rel="noopener" style="color:#E9E1F3;text-decoration:none;min-height:36px;display:flex;align-items:center" style-hover="color:#fff">PORTAL DEL ESTUDIANTE</a>
+<a href="https://adistancia.ucontinental.edu.pe/" target="_blank" rel="noopener" style="color:#E9E1F3;text-decoration:none;min-height:36px;display:flex;align-items:center" style-hover="color:#fff">MODALIDAD A DISTANCIA</a>
+</div>
+</div>
+<header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-bottom:1px solid #ECE6F3">
+<div style="max-width:1240px;margin:0 auto;padding:0 {{ padX }};min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+<a href="#inicio" aria-label="Universidad Continental · Modalidad A Distancia" style="display:flex;align-items:center;flex-shrink:0"><img src="https://adistancia.ucontinental.edu.pe/assets/img/logo.svg" alt="Universidad Continental · Modalidad A Distancia" style="height:44px;width:auto"></a>
+<sc-if value="{{ escritorio }}" hint-placeholder-val="{{ true }}">
+<nav aria-label="Secciones" style="display:flex;align-items:center;gap:4px">
+<sc-for list="{{ menu }}" as="m" hint-placeholder-count="5"><a href="{{ m.href }}" style="min-height:44px;padding:0 12px;display:flex;align-items:center;white-space:nowrap;color:#15111C;text-decoration:none;font-size:15px;font-weight:500;border-radius:8px" style-hover="color:#6A00BE;background:#F3ECFB">{{ m.t }}</a></sc-for>
+<a href="app.html" style="margin-left:10px;flex:none;white-space:nowrap;min-height:46px;padding:0 20px;border-radius:999px;background:#6A00BE;color:#fff;font-weight:700;font-size:15px;text-decoration:none;display:flex;align-items:center" style-hover="background:#4B0087;color:#fff">Ingresar con mi cuenta</a>
+</nav>
+</sc-if>
+<sc-if value="{{ movil }}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{ toggleMenu }}" aria-expanded="{{ menuAbierto }}" aria-controls="menu-movil" style="min-height:44px;padding:0 16px;border-radius:999px;border:2px solid #6A00BE;background:#fff;color:#4B0087;font:700 14px 'DM Sans',sans-serif;cursor:pointer">{{ menuTxt }}</button>
+</sc-if>
+</div>
+<sc-if value="{{ menuMovil }}" hint-placeholder-val="{{ false }}">
+<nav id="menu-movil" aria-label="Secciones" style="border-top:1px solid #ECE6F3;padding:8px 16px 16px;display:flex;flex-direction:column;background:#fff">
+<sc-for list="{{ menu }}" as="m" hint-placeholder-count="5"><a href="{{ m.href }}" onClick="{{ cerrarMenu }}" style="min-height:48px;display:flex;align-items:center;color:#15111C;text-decoration:none;font-weight:500;border-bottom:1px solid #F0EBF5">{{ m.t }}</a></sc-for>
+<a href="app.html" style="margin-top:12px;min-height:48px;border-radius:999px;background:#6A00BE;color:#fff;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center">Ingresar con mi cuenta</a>
+</nav>
+</sc-if>
+</header>
+
+<main id="contenido" style="flex:1">
+<section id="inicio" style="display:grid;grid-template-columns:{{ heroCols }}">
+<div style="background:#6A00BE;color:#fff;padding:{{ heroPad }};display:flex;flex-direction:column;gap:20px;justify-content:center">
+<span style="align-self:flex-start;padding:6px 14px;border-radius:999px;background:#F2A900;color:#1A1A1A;font-weight:700;font-size:12.5px;letter-spacing:.05em">MODALIDAD A DISTANCIA · CURSOS DE VERANO</span>
+<h1 style="font:700 clamp(34px,5vw,52px)/1.1 Sora,sans-serif;margin:0;letter-spacing:-.015em;text-wrap:balance">Egresar en <span style="color:#F2A900">menos tiempo</span> sí puede ser posible</h1>
+<p style="font-size:18px;color:#F1E7FB;max-width:46ch;margin:0">Aprovecha el verano para ponerte al día, aligerar tus próximos semestres o avanzar hacia el final de tu carrera.</p>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<a href="app.html" style="min-height:52px;padding:0 24px;border-radius:999px;background:#fff;color:#4B0087;font-weight:700;font-size:15.5px;text-decoration:none;display:flex;align-items:center" style-hover="background:#F3ECFB;color:#4B0087">Ingresar con mi cuenta institucional</a>
+<a href="#como-funciona" style="min-height:52px;padding:0 24px;border-radius:999px;border:2px solid #fff;color:#fff;font-weight:700;font-size:15.5px;text-decoration:none;display:flex;align-items:center" style-hover="background:rgba(255,255,255,.12);color:#fff">Cómo funciona</a>
+</div>
+<p style="font-size:14px;color:#E4D3FA;margin:0;max-width:52ch">Al ingresar verás tu avance, los cursos que puedes llevar y podrás armar tu solicitud.</p>
+</div>
+<div style="position:relative;overflow:hidden;background:#120C1C;color:#fff;padding:{{ heroPad }};display:flex;flex-direction:column;justify-content:center;gap:24px;min-height:420px">
+<img src="https://ucontinental.edu.pe/site/wp-content/themes/salient-child/img/home-img-1.webp" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,12,28,.95) 0%,rgba(18,12,28,.86) 55%,rgba(18,12,28,.6) 100%)"></div>
+<div aria-hidden="true" style="position:relative;display:flex;gap:18px"><i style="width:6px;background:#F2A900;flex:none"></i><div style="display:flex;flex-direction:column;font-family:'Bebas Neue',sans-serif;letter-spacing:.02em"><span style="font-size:clamp(30px,4.4vw,52px);line-height:.95">Organiza tu</span><span style="font-size:clamp(72px,10vw,132px);line-height:.88;color:#F2A900">Verano</span><span style="font-size:clamp(30px,4.4vw,52px);line-height:.95">y sigue avanzando</span></div></div>
+<div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0;border-top:2px solid #6A00BE;padding-top:18px">
+<sc-for list="{{ afiche }}" as="a" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;padding:4px 18px 4px 0;font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1.05;letter-spacing:.03em">{{ a.t }}<span style="color:#D9C2F0">{{ a.d }}</span></div></sc-for>
+</div>
+<p style="position:relative;font-size:14px;color:#E9E1F3;max-width:60ch;margin:0">El tiempo en que podrías terminar tu carrera depende de tu avance académico, de los requisitos de cada curso y de la oferta disponible.</p>
+</div>
+</section>
+
+<section id="que-es" style="padding:{{ bloquePad }}">
+<div style="max-width:1240px;margin:0 auto;padding:0 {{ padX }};display:flex;flex-direction:column;gap:36px">
+<div style="display:grid;grid-template-columns:{{ dosCols }};gap:28px 56px;align-items:end">
+<div><span style="font-size:13px;font-weight:700;letter-spacing:.08em;color:#6A00BE">EL CICLO DE VERANO</span><h2 style="font:700 clamp(28px,4vw,40px)/1.15 Sora,sans-serif;margin:8px 0 0;text-wrap:balance">¿Qué es el ciclo de verano?</h2></div>
+<p style="font-size:17px;color:#575163;margin:0">Es un periodo intensivo entre enero y febrero en el que puedes llevar algunos cursos de tu plan de estudios. Los cursos se abren según la demanda, el aforo mínimo y la programación académica.</p>
+</div>
+<div aria-hidden="true" style="display:grid;grid-template-columns:minmax(0,3fr) minmax(0,3fr) minmax(0,2fr);gap:6px">
+<div style="background:#F3ECFB;border-radius:14px 4px 4px 14px;padding:14px 12px;display:flex;flex-direction:column;gap:2px;min-width:0;overflow-wrap:anywhere"><span style="font:400 24px/1 'Bebas Neue',sans-serif;color:#4B0087">Semestre</span><span style="font-size:13px;color:#575163">Periodo regular</span></div>
+<div style="background:#F3ECFB;border-radius:4px;padding:14px 12px;display:flex;flex-direction:column;gap:2px;min-width:0;overflow-wrap:anywhere"><span style="font:400 24px/1 'Bebas Neue',sans-serif;color:#4B0087">Semestre</span><span style="font-size:13px;color:#575163">Periodo regular</span></div>
+<div style="background:#F2A900;border-radius:4px 14px 14px 4px;padding:14px 12px;display:flex;flex-direction:column;gap:2px;min-width:0;overflow-wrap:anywhere"><span style="font:400 24px/1 'Bebas Neue',sans-serif;color:#1A1A1A">Verano</span><span style="font-size:13px;color:#1A1A1A">Enero y febrero</span></div>
+</div>
+<div style="background:#F6F2FA;border-radius:24px;padding:{{ cajaPad }};display:flex;flex-direction:column;gap:24px">
+<div role="tablist" aria-label="Del simulador a la matrícula" style="display:grid;grid-template-columns:{{ fasesCols }};gap:8px;position:relative">
+<sc-for list="{{ fases }}" as="f" hint-placeholder-count="3">
+<button type="button" role="tab" aria-selected="{{ f.on }}" onClick="{{ f.go }}" style="min-height:76px;border-radius:16px;padding:12px 14px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;font-family:inherit;transition:background .2s,border-color .2s;background:{{ f.bg }};color:{{ f.fg }};border:2px solid {{ f.bd }}">
+<span style="width:40px;height:40px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;font:400 24px/1 'Bebas Neue',sans-serif;background:{{ f.nBg }};color:{{ f.nFg }}">{{ f.n }}</span>
+<span style="display:flex;flex-direction:column;min-width:0"><b style="font:700 17px Sora,sans-serif">{{ f.t }}</b><span style="font-size:13px;opacity:.9">{{ f.donde }}</span></span>
+</button>
+</sc-for>
+</div>
+<div role="tabpanel" style="display:grid;grid-template-columns:{{ dosCols }};gap:20px 40px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:10px"><span style="font:400 22px/1 'Bebas Neue',sans-serif;letter-spacing:.04em;color:#6A00BE">Paso {{ faseN }} de 3</span><h3 style="font:700 26px/1.2 Sora,sans-serif;margin:0">{{ faseT }}</h3><p style="margin:0;font-size:17px;color:#3E3850;max-width:52ch">{{ faseP }}</p></div>
+<div style="background:#fff;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px;border:1px solid #E5E2EB">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><span style="font-size:13px;font-weight:700;letter-spacing:.06em;color:#575163">DÓNDE OCURRE</span><span style="padding:4px 12px;border-radius:999px;font-size:13px;font-weight:700;background:{{ faseDBg }};color:{{ faseDFg }}">{{ faseD }}</span></div>
+<div style="display:flex;gap:6px"><sc-for list="{{ fases }}" as="f" hint-placeholder-count="3"><span style="flex:1;height:6px;border-radius:99px;background:{{ f.bar }}"></span></sc-for></div>
+<p style="margin:0;font-size:14px;color:#575163">{{ faseNota }}</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="beneficios" style="padding:{{ bloquePad }};background:#6A00BE;color:#fff">
+<div style="max-width:1240px;margin:0 auto;padding:0 {{ padX }};display:flex;flex-direction:column;gap:32px">
+<h2 style="font:700 clamp(28px,4vw,40px)/1.15 Sora,sans-serif;margin:0;color:#fff">¿Para qué te sirve el verano?</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+<sc-for list="{{ beneficios }}" as="b" hint-placeholder-count="3">
+<article style="background:#fff;color:#15111C;border-radius:20px;padding:26px;display:flex;flex-direction:column;gap:12px;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-4px);box-shadow:0 18px 40px rgba(18,12,28,.25)">
+<div style="width:64px;height:64px;border-radius:16px;background:#F3ECFB;display:flex;align-items:center;justify-content:center"><img src="{{ b.icono }}" alt="" style="width:44px;height:44px"></div>
+<h3 style="font:700 20px Sora,sans-serif;margin:0;color:#4B0087">{{ b.t }}</h3>
+<p style="margin:0;color:#575163">{{ b.p }}</p>
+</article>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section id="como-funciona" style="padding:{{ bloquePad }}">
+<div style="max-width:1240px;margin:0 auto;padding:0 {{ padX }};display:grid;grid-template-columns:{{ dosCols }};gap:40px 64px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<div><span style="font-size:13px;font-weight:700;letter-spacing:.08em;color:#6A00BE">PASO A PASO</span><h2 style="font:700 clamp(28px,4vw,40px)/1.15 Sora,sans-serif;margin:8px 0 0">Cómo funciona</h2></div>
+<ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+<sc-for list="{{ como }}" as="c" hint-placeholder-count="4">
+<li style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 16px">
+<div style="display:flex;flex-direction:column;align-items:center"><span style="width:44px;height:44px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;font:400 24px/1 'Bebas Neue',sans-serif;transition:background .2s;background:{{ c.nBg }};color:{{ c.nFg }};border:2px solid {{ c.nBd }}">{{ c.n }}</span><sc-if value="{{ c.linea }}" hint-placeholder-val="{{ true }}"><span style="flex:1;width:3px;min-height:18px;border-radius:2px;transition:background .3s;background:{{ c.lBg }}"></span></sc-if></div>
+<button type="button" onClick="{{ c.go }}" aria-expanded="{{ c.on }}" style="text-align:left;background:{{ c.bg }};border:0;border-radius:14px;padding:10px 14px;margin:0 0 14px;cursor:pointer;font-family:inherit;color:#15111C;min-height:44px;transition:background .2s" style-hover="background:#F6F2FA">
+<b style="display:block;font:700 17px/1.3 Sora,sans-serif">{{ c.t }}</b>
+<sc-if value="{{ c.on }}" hint-placeholder-val="{{ false }}"><span style="display:block;margin-top:6px;color:#575163;font-size:15.5px">{{ c.p }}</span></sc-if>
+</button>
+</li>
+</sc-for>
+</ol>
+</div>
+<div style="position:relative;border-radius:24px;overflow:hidden;aspect-ratio:4/3;background:#120C1C">
+<img src="https://adistancia.ucontinental.edu.pe/assets/img/ciencias-de-la-computacion-sm.webp" alt="Estudiante trabajando en su computadora" style="width:100%;height:100%;object-fit:cover;display:block">
+<div style="position:absolute;left:16px;right:16px;bottom:16px;background:rgba(18,12,28,.9);color:#fff;border-radius:16px;padding:16px 18px;display:flex;align-items:center;gap:16px">
+<span style="font:400 54px/0.85 'Bebas Neue',sans-serif;color:#F2A900">{{ comoN }}</span>
+<span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:12.5px;font-weight:700;letter-spacing:.06em;color:#D9C2F0">PASO {{ comoN }} DE 4</span><b style="font:700 16px/1.3 Sora,sans-serif">{{ comoT }}</b></span>
+</div>
+</div>
+</div>
+</section>
+
+<section id="requisitos" style="padding:{{ bloquePad }};background:#F6F2FA">
+<div style="max-width:1240px;margin:0 auto;padding:0 {{ padX }};display:grid;grid-template-columns:{{ dosCols }};gap:24px">
+<div style="background:#fff;border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:18px">
+<h3 style="font:700 22px Sora,sans-serif;margin:0">Requisitos generales</h3>
+<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ requisitos }}" as="r" hint-placeholder-count="4"><li style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 14px;border-radius:12px;background:#F8F7FA"><span style="width:26px;height:26px;flex:none;border-radius:99px;background:#6A00BE;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">✓</span><span style="font-weight:500">{{ r }}</span></li></sc-for>
+</ul>
+</div>
+<div style="background:#120C1C;color:#fff;border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:18px;border:3px solid #F2A900">
+<h3 style="font:700 22px Sora,sans-serif;margin:0">Fechas</h3>
+<ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+<sc-for list="{{ fechas }}" as="f" hint-placeholder-count="3">
+<li style="display:grid;grid-template-columns:20px minmax(0,1fr);gap:0 16px">
+<div style="display:flex;flex-direction:column;align-items:center;padding-top:5px"><span style="width:14px;height:14px;border-radius:99px;background:#F2A900;flex:none"></span><sc-if value="{{ f.linea }}" hint-placeholder-val="{{ true }}"><span style="flex:1;width:2px;background:#4B3A63;margin:4px 0"></span></sc-if></div>
+<div style="padding-bottom:18px"><b style="display:block;font:700 16px Sora,sans-serif">{{ f.t }}</b><span style="color:#E9E1F3">{{ f.d }}</span></div>
+</li>
+</sc-for>
+</ol>
+</div>
+</div>
+</section>
+
+<section id="preguntas" style="padding:{{ bloquePad }}">
+<div style="max-width:860px;margin:0 auto;padding:0 {{ padX }};display:flex;flex-direction:column;gap:20px">
+<h2 style="font:700 clamp(28px,4vw,40px)/1.15 Sora,sans-serif;margin:0">Preguntas frecuentes</h2>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ faqs }}" as="q" hint-placeholder-count="5">
+<div style="border-radius:16px;transition:background .2s;background:{{ q.bg }};border:1px solid {{ q.bd }}">
+<button type="button" onClick="{{ q.go }}" aria-expanded="{{ q.on }}" style="width:100%;min-height:60px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:none;border:0;cursor:pointer;font:700 16.5px/1.35 'DM Sans',sans-serif;color:#15111C;text-align:left">{{ q.t }}<span aria-hidden="true" style="width:32px;height:32px;flex:none;border-radius:99px;display:flex;align-items:center;justify-content:center;font:700 20px Sora,sans-serif;background:{{ q.iBg }};color:{{ q.iFg }}">{{ q.icon }}</span></button>
+<sc-if value="{{ q.on }}" hint-placeholder-val="{{ false }}"><p style="margin:0;padding:0 18px 18px;color:#3E3850;font-size:15.5px">{{ q.p }}</p></sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section style="position:relative;overflow:hidden;padding:{{ bloquePad }};color:#fff;background:#120C1C">
+<img src="https://ucontinental.edu.pe/site/wp-content/themes/salient-child/img/tu-futuro-es-global.webp" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,12,28,.96) 0%,rgba(18,12,28,.9) 55%,rgba(75,0,135,.85) 100%)"></div>
+<div style="position:relative;max-width:1240px;margin:0 auto;padding:0 {{ padX }};display:flex;flex-direction:column;gap:16px;align-items:flex-start">
+<h2 style="font:700 clamp(28px,4vw,42px)/1.15 Sora,sans-serif;margin:0;color:#fff">Arma tu verano en pocos minutos</h2>
+<p style="font-size:17px;color:#E9E1F3;margin:0 0 8px">Ingresa con tu cuenta institucional y descubre qué cursos puedes llevar.</p>
+<a href="app.html" style="min-height:52px;padding:0 24px;border-radius:999px;background:#F2A900;color:#1A1A1A;font-weight:700;font-size:15.5px;text-decoration:none;display:flex;align-items:center" style-hover="background:#FFC23D;color:#1A1A1A">Ingresar con mi cuenta institucional</a>
+</div>
+</section>
+</main>
+
+<footer style="background:#6A00BE;color:#F1E7FB;font-size:14px">
+<div style="max-width:1240px;margin:0 auto;padding:24px {{ padX }};display:flex;flex-wrap:wrap;gap:14px 28px;justify-content:space-between;align-items:center">
+<img src="https://ucontinental.edu.pe/site/wp-content/themes/salient-child/img/logo.svg" alt="Universidad Continental" style="height:32px;filter:brightness(0) invert(1)">
+<span style="display:flex;gap:18px;flex-wrap:wrap"><a href="https://estudiantes.ucontinental.edu.pe/" target="_blank" rel="noopener" style="color:#fff;min-height:44px;display:flex;align-items:center">Portal del estudiante</a><a href="https://adistancia.ucontinental.edu.pe/" target="_blank" rel="noopener" style="color:#fff;min-height:44px;display:flex;align-items:center">Modalidad A Distancia</a></span>
+<span>Prototipo con datos de ejemplo</span>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { w: typeof window !== 'undefined' ? window.innerWidth : 1280, menu: false, fase: 0, como: 0, faq: 0 };
+  componentDidMount() { this._r = () => this.setState({ w: window.innerWidth }); window.addEventListener('resize', this._r); }
+  componentWillUnmount() { window.removeEventListener('resize', this._r); }
+  renderVals() {
+    const { w, fase, como, faq } = this.state, movil = w < 760, navMovil = w < 1180, ancho = w >= 1000;
+    const FASES = [
+      { t: 'Simula', donde: 'En este portal', p: 'Con tu cuenta ves cuándo podrías terminar tu carrera con y sin veranos, y qué cursos puedes llevar.', dBg: '#F3ECFB', dFg: '#4B0087', nota: 'Al ingresar verás tu avance, los cursos que puedes llevar y podrás armar tu solicitud.' },
+      { t: 'Solicita', donde: 'En este portal', p: 'Solicita la apertura de los cursos que te interesan. Nos ayuda a decidir qué cursos abrir. No es todavía una matrícula.', dBg: '#F3ECFB', dFg: '#4B0087', nota: 'La solicitud nos ayuda a decidir qué cursos abrir. Te matriculas después en la intranet, en las fechas oficiales.' },
+      { t: 'Matricúlate', donde: 'En la intranet', p: 'Cuando se abra la matrícula, te inscribes en la intranet con los cursos que armaste.', dBg: '#F2A900', dFg: '#1A1A1A', nota: 'Matrícula de verano: en la intranet, en las fechas oficiales.' }
+    ];
+    const COMO = [
+      ['Ingresa con tu cuenta @continental.edu.pe', 'Solo tú ves tu información académica.'],
+      ['Revisa tu avance y tu malla', 'Créditos aprobados, los que te faltan y tus cursos pendientes.'],
+      ['Mira tus escenarios y solicita tus cursos', 'Compara cuándo terminarías con 0, 1, 2 o 3 veranos y solicita la apertura de los cursos que puedes llevar.'],
+      ['Elige tu horario y matricúlate', 'Cuando se publiquen los horarios, eliges tu sección aquí y te matriculas en la intranet.']
+    ];
+    const FAQ = [
+      ['¿Enviar mi solicitud ya es matricularme?', 'No. La solicitud nos ayuda a decidir qué cursos abrir. Te matriculas después en la intranet, en las fechas oficiales.'],
+      ['¿Cuántos créditos puedo llevar en verano?', 'Hasta 11 créditos.'],
+      ['¿Puedo recuperar un curso desaprobado?', 'Sí, si el curso se ofrece en verano. Al ingresar verás cuáles puedes recuperar.'],
+      ['¿Terminar antes es titularme antes?', 'No necesariamente. Se refiere a completar los cursos del plan; la titulación tiene sus propios requisitos.'],
+      ['¿Por qué no veo los cursos aquí?', 'La información de tu plan y de la oferta es personal: la ves al ingresar con tu cuenta institucional.']
+    ];
+    const F = FASES[fase];
+    return {
+      movil: navMovil, escritorio: !navMovil, padX: movil ? '18px' : '32px',
+      heroCols: ancho ? 'minmax(0,5fr) minmax(0,7fr)' : 'minmax(0,1fr)',
+      heroPad: ancho ? '72px 48px 72px max(32px, calc((100vw - 1240px)/2 + 32px))' : (movil ? '44px 18px' : '56px 32px'),
+      dosCols: ancho ? 'minmax(0,1fr) minmax(0,1fr)' : 'minmax(0,1fr)',
+      bloquePad: movil ? '56px 0' : '88px 0', cajaPad: movil ? '16px' : '28px', fasesCols: movil ? 'minmax(0,1fr)' : 'repeat(3,minmax(0,1fr))',
+      menuAbierto: this.state.menu, menuMovil: navMovil && this.state.menu, menuTxt: this.state.menu ? 'Cerrar' : 'Menú',
+      toggleMenu: () => this.setState((s) => ({ menu: !s.menu })), cerrarMenu: () => this.setState({ menu: false }),
+      menu: [['#que-es', 'Qué es el verano'], ['#beneficios', 'Beneficios'], ['#como-funciona', 'Cómo funciona'], ['#requisitos', 'Requisitos'], ['#preguntas', 'Preguntas']].map(([href, t]) => ({ href, t })),
+      afiche: [{ t: 'Verano', d: 'Hasta 11 créditos' }, { t: 'Modalidad', d: '100% virtual' }, { t: 'Tu plan', d: 'Con tu cuenta UC' }],
+      fases: FASES.map((f, i) => { const on = i === fase; return { n: i + 1, t: f.t, donde: movil ? '' : f.donde, on, go: () => this.setState({ fase: i }), bg: on ? '#6A00BE' : '#fff', fg: on ? '#fff' : '#15111C', bd: on ? '#6A00BE' : '#E5E2EB', nBg: on ? '#F2A900' : '#F3ECFB', nFg: on ? '#1A1A1A' : '#4B0087', bar: i <= fase ? '#6A00BE' : '#E5E2EB' }; }),
+      faseN: fase + 1, faseT: F.t, faseP: F.p, faseD: F.donde, faseDBg: F.dBg, faseDFg: F.dFg, faseNota: F.nota,
+      beneficios: [
+        { icono: 'https://adistancia.ucontinental.edu.pe/assets/img/icon-certificado-uc.svg', t: 'Ponte al día', p: 'Si tienes un curso pendiente, llevarlo en verano te ayuda a retomar tu ritmo en el siguiente semestre.' },
+        { icono: 'https://adistancia.ucontinental.edu.pe/assets/img/icon-tutorial-uc.svg', t: 'Equilibra tu carga', p: 'Adelantar uno o dos cursos te permite llevar semestres más livianos, ideal si trabajas.' },
+        { icono: 'https://adistancia.ucontinental.edu.pe/assets/img/icon-birrete.svg', t: 'Avanza hacia tu egreso', p: 'Aprovechar los veranos y seguir el orden de tu plan podría acercarte antes al final de tu carrera.' }
+      ],
+      como: COMO.map(([t, p], i) => { const on = i === como, hecho = i < como; return { n: i + 1, t, p, on, linea: i < 3, go: () => this.setState({ como: i }), nBg: on ? '#6A00BE' : hecho ? '#F3ECFB' : '#fff', nFg: on ? '#fff' : '#4B0087', nBd: on || hecho ? '#6A00BE' : '#D9C2F0', lBg: i < como ? '#6A00BE' : '#E5E2EB', bg: on ? '#F6F2FA' : 'transparent' }; }),
+      comoN: como + 1, comoT: COMO[como][0],
+      requisitos: ['Pagos al día', 'Prerrequisitos aprobados', 'Hasta 11 créditos en el verano', 'Matrícula dentro de las fechas oficiales'],
+      fechas: [['Solicitudes', 'Se anunciarán en el calendario académico'], ['Matrícula de verano', 'En la intranet, en las fechas oficiales'], ['Horarios', 'Mismo rango horario de los semestres regulares']].map(([t, d], i) => ({ t, d, linea: i < 2 })),
+      faqs: FAQ.map(([t, p], i) => { const on = i === faq; return { t, p, on, go: () => this.setState({ faq: on ? -1 : i }), icon: on ? '−' : '+', bg: on ? '#F6F2FA' : '#fff', bd: on ? '#D9C2F0' : '#E5E2EB', iBg: on ? '#6A00BE' : '#F3ECFB', iFg: on ? '#fff' : '#6A00BE' }; })
+    };
+  }
+}
+</script>
+</body>
+</html>
